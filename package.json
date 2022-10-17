@@ -1,0 +1,33 @@
+{
+  "name": "hypertext-editor",
+  "version": "1.0.0",
+  "description": "Hypertext HTML Document Editor",
+  "author": "Russell Beattie <russ@russellbeattie.com> (http://www.russellbeattie.com/)",
+  "homepage": "https://www.hypertext.plus",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/russellbeattie/hypertext-editor.git"
+  },
+  "browserslist": [
+    "last 2 versions"
+  ],
+  "dependencies": {
+    "@babel/core": "^7.5.0",
+    "@babel/preset-env": "^7.5.2",
+    "babel-eslint": "^10.0.2",
+    "del": "^5.0.0",
+    "glob": "8.0.3",
+    "gulp": "^4.0.2",
+    "gulp-connect": "^5.7.0",
+    "gulp-copy": "^4.0.1",
+    "tinymce": "6.2.0"
+  },
+  "scripts": {
+    "build": "gulp build",
+    "build-prod": "gulp buildProd",
+    "clean": "gulp clean",
+    "serve": "gulp serve",
+    "start": "gulp serve"
+  }
+}

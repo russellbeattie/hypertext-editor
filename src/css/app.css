@@ -1,0 +1,208 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9fb;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+a#logo {
+    display: block;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    padding: 2px;
+    background: url("../assets/hypertext-round-icon.svg") center center no-repeat;
+    justify-self: flex-end;
+    align-self: center;
+    margin-left: auto;
+    margin-right: 5px;
+
+}
+
+.not-supported{
+  font-family: system-ui;
+  font-size: 1.5rem;
+  padding: 20px;
+  margin: 200px auto;
+  color: #020887;
+  max-width: 700px;
+  border: 1px solid #020887;
+  text-align: center;
+  align-self: center;
+
+}
+
+.cke_1.cke_chrome, .cke_chrome {
+    border: none;
+}
+
+textarea.cke_source {
+    padding: 2rem !important;
+    max-width: 95vw;
+    font-size: 1rem !important;
+}
+
+#cke_tooltip {
+    display: none !important;
+}
+
+.tox:not([dir=rtl]) .tox-toolbar__group:not(:last-of-type) {
+    border-right: 1px solid #ddd !important;
+}
+
+.tox .tox-sidebar-wrap {
+    /*flex-direction: row-reverse !important;*/
+}
+
+#css-wrapper {
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+#css-header {
+    padding: 12px 8px 8px;
+    border-bottom: 1px solid #ccc;
+    height: 46px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#css-header .tox-icon {
+    padding-right: 5px;
+    cursor: pointer;
+}
+
+#css-editor {
+    width: 500px;
+    height: calc(100% - 46px);
+}
+
+.toolbar-closed {
+  transform: translateY(100%);
+  transition: transform ease-out 0.3s;
+}
+
+.toolbar-open {
+    transform: translateY(0);
+    transition: transform ease-out 0.3s;
+}
+
+input::placeholder{
+    color: #ccc;
+}
+
+
+
+.tox .tox-menubar {
+    background-color: #020887;
+    color: #fff;
+}
+
+
+
+.tox .tox-menubar svg path {
+    fill: #fff;
+}
+
+.tox .tox-mbtn__select-label {
+    color: #fff;
+}
+
+.tox-icon .tox-tbtn__icon-wrap {
+    color: #020887;
+}
+
+.tox-platform-touch .tox-mbtn__select-label {
+  display: none;
+}
+
+html.file-menu .tox-mbtn__select-label {
+    display: initial;
+}
+
+html.file-menu .tox-tbtn__icon-wrap {
+    display: none;
+}
+
+
+.tox .tox-mbtn:focus:not(:disabled) .tox-mbtn__select-label {
+    color: #020887;
+}
+
+.tox .tox-mbtn:focus:not(:disabled) svg path {
+    fill: #020887;
+}
+
+.tox .tox-mbtn:hover:not(:disabled):not(.tox-mbtn--active) .tox-mbtn__select-label {
+    color: #020887;
+}
+
+.tox .tox-mbtn:hover:not(:disabled):not(.tox-mbtn--active) svg path {
+    fill: #020887;
+}
+
+.tox .tox-mbtn--active {
+    fill: #020887;
+}
+
+.tox .tox-mbtn--active svg path{
+    fill: #020887;
+}
+
+.tox .tox-mbtn--active .tox-mbtn__select-label {
+    color: #020887;
+    fill: #020887;
+}
+
+.tox .tox-mbtn:focus:not(:disabled) {
+    color: #020887;
+    fill: #020887;
+}
+
+
+html.dark-mode {
+    filter: invert(100%) hue-rotate(180deg);
+    background-color: #ddd;
+}
+
+html.dark-mode img, html.dark-mode a#logo {
+    filter: none;
+
+}
+
+html.dark-mode .tox-menubar {
+    filter: invert(100%) hue-rotate(180deg);
+}
+
+@media (prefers-color-scheme: dark) {
+
+    html {
+        filter: invert(100%) hue-rotate(180deg);
+        background-color: #ddd;
+    }
+
+    html img, html a#logo {
+        filter: none;
+    }
+
+    html .tox-menubar {
+        filter: invert(100%) hue-rotate(180deg);
+    }
+
+    html.dark-mode {
+        filter: none;
+    }
+
+    html.dark-mode img, html.dark-mode a#logo {
+        filter: none;
+    }
+
+    html.dark-mode .tox-menubar {
+        filter: none;
+    }
+
+}
