@@ -1,8 +1,12 @@
 /* *********************** */
+  
+  let contentCSSUrl = './css/doc-wrapper.css';
+  let skinName = './css/hypertext-skin';
 
-  let content_css = new URL('./css/doc-wrapper.css', window.location.href).toString();
-  let skin_url = new URL('./css/hypertext-skin', window.location.href).toString();
+  let content_css = new URL(contentCSSUrl, window.location.href).toString();
+  let skin_url = new URL(skinName, window.location.href).toString();
   let theme_url = new URL('./scripts/hypertext-theme.js', window.location.href).toString();
+  let model_url = new URL('./scripts/hypertext-model.js', window.location.href).toString();
 
 
 let editorInitSettings = {
@@ -14,24 +18,26 @@ let editorInitSettings = {
   min_height: 1088,
   max_width: 816,
 
+  model_url: model_url,
+
   setup: editorSetup,
 
-  plugins: ['anchor', 'autolink', 'autosave', 'codesample', 'help', 'insertdatetime', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'visualchars', 'wordcount'],
+  plugins: ['anchor', 'autolink', 'autosave', 'codesample', 'help', 'insertdatetime', 'link', 'lists', 'searchreplace', 'table', 'visualblocks', 'visualchars', 'wordcount'],
 
-  contextmenu: 'undo redo | link anchor | forecolor backcolor | image | table | attributes | add-tag',
+  contextmenu: 'undo redo | link anchor | forecolor backcolor | image | table | attributes | edit-tag',
 
   toolbar: false,
 
   menubar: 'file edit view insert format blocks tools help',
 
   menu: {
-    file: { title: 'File', items: 'menunew menuopen | menusave menusaveas | export | cssfile-menu | edit-doc-props | restoredraft | preview print ' },
+    file: { title: 'File', items: 'menunew menuopen | menusave menusaveas | cssfile-menu | edit-doc-props | restoredraft | preview print ' },
     edit: { title: 'Edit', items: 'undo redo | cut copy paste selectall | pastetext | searchreplace' },
     view: { title: 'View', items: 'visualaid-option visualchars visualblocks | toggle-textmenu toggle-darkmode | wordcount' },
-    insert: { title: 'Insert', items: 'link image media codesample hr add-toc | inserttable | anchor | unordered ordered | insertdatetime' },
+    insert: { title: 'Insert', items: 'link image embed codesample hr add-toc | inserttable | anchor | unordered ordered | insertdatetime' },
     format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat forecolor backcolor | removeformat ' },
     blocks: { title: 'Paragraphs', items: 'styles | indentation align' },
-    tools: { title: 'Tools', items: 'edit-prefs | edit-head edit-body edit-css edit-block | add-tag' },
+    tools: { title: 'Tools', items: 'edit-prefs | edit-head edit-body edit-css edit-block edit-tag | run-macro ' },
     help: { title: 'Help', items: 'help' },
   },
 
@@ -50,16 +56,21 @@ let editorInitSettings = {
     ]}
   ],
 
-  extended_valid_elements: 'img[id|class|src|alt|title|align|name|is|data-*]',
-  valid_elements: 'table[id|class|style],tr[id|class|style],td[id|class|style]',
-
   block_formats: 'Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4; Blockquote=blockquote; Pre=pre',
+
+  valid_elements: '*[*]',
+  extended_valid_elements : "a[class|name|href|target|title|rel],script[*],iframe[*],img[class|src|alt|title|width|height|align|name],object[*],embed[*]",
+
+
+  // protect: [/<script>[\s\S]*?<\/script>/g],
+
 
   formats: {
     bold: { inline: 'strong' },
     italic: { inline: 'em' },
     underline: { inline: 'u' },
-    strikethrough: { inline: 's' }
+    strikethrough: { inline: 's' },
+    main: { block: 'main', wrapper: true, merge_siblings: true, deep: true, remove: 'none' },
   },
 
   mobile: {
@@ -77,7 +88,7 @@ let editorInitSettings = {
   body_id: 'doc',
   branding: false,
   browser_spellcheck: true,
-  contextmenu_never_use_native: true,
+  contextmenu_never_use_native: false,
   convert_urls: false,
   elementpath: true,
   end_container_on_empty_block: true,
@@ -89,6 +100,8 @@ let editorInitSettings = {
   height: '100vh',
   image_advtab: false,
   image_caption: true,
+  image_title: true,
+  image_description: false,
   image_dimensions: false,
   image_uploadtab: false,
   images_reuse_filename: true,
@@ -98,25 +111,27 @@ let editorInitSettings = {
   indentation: '2rem',
   insertdatetime_element: false,
   insertdatetime_formats: ['%A %B %d, %Y - %I:%M %p', '%A %B %d, %Y', '%B %d, %Y', '%D', '%Y-%m-%d', '%Y-%m-%d %I:%M %p'],
+  keep_styles: false,
   line_height_formats: '',
   link_context_toolbar: true,
   link_default_target: '_blank',
   link_quicklink: true,
   link_target_list: false,
   link_title: false,
+  media_alt_source: false,
   media_dimensions: false,
-  media_live_embeds: false,
+  media_live_embeds: true,
   noneditable_class: 'tag',
-  object_resizing: 'table',
-  paste_block_drop: true,
-  paste_data_images: false,
+  paste_block_drop: false,
+  paste_data_images: true,
   paste_preprocess: pastePreprocess,
   paste_remove_styles_if_webkit: true,
+  paste_merge_formats: false,
   promotion: false,
   quickbars_insert_toolbar: false,
   relative_urls: true,
   resize: false,
-  resize_img_proportional: false,
+  resize_img_proportional: true,
   schema: 'html5-strict',
   smart_paste: true,
   style_formats_autohide: false,
@@ -125,8 +140,6 @@ let editorInitSettings = {
   table_appearance_options: false,
   table_cell_advtab: false,
   table_clone_elements: 'strong em a p',
-  table_default_attributes: {},
-  table_default_styles: {},
   table_header_type: 'section',
   table_resize_bars: true,
   table_row_advtab: true,
@@ -145,5 +158,31 @@ let editorInitSettings = {
   allow_svg_data_urls: true,
 
   file_picker_callback: filePicker,
+
+  // init_instance_callback: (editor) => {
+  //   editor.on('ExecCommand', (e) => {
+  //     console.log(`The ${e.command} command was fired.`);
+  //   });
+  // }
+
+ text_patterns: [
+    {start: '#', format: 'h1'},
+    {start: '##', format: 'h2'},
+    {start: '###', format: 'h3'},
+    {start: '####', format: 'h4'},
+    {start: '#####', format: 'h5'},
+    {start: '*', end: '*', format: 'italic'},
+    {start: '_', end: '_', format: 'italic'},
+    {start: '**', end: '**', format: 'bold'},
+    {start: '***', end: '***', format: 'bold+italic'},
+    {start: '~~', end: '~~', format: 'strikethrough'},
+    {start: '1. ', cmd: 'InsertOrderedList'},
+    {start: '* ', cmd: 'InsertUnorderedList'},
+    {start: '- ', cmd: 'InsertUnorderedList'},
+    {start: '> ', cmd: 'mceBlockQuote'},
+    {start: '`', end: '`', format: 'code'},
+    {start: '---', replacement: '<hr/>'},
+  ]
+
 
 };

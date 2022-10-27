@@ -1,74 +1,105 @@
-/**
- * Hypertext CSS for HTML Documents v1.0
- *
- * MIT License
- * Russell Beattie russ@russellbeattie.com
- * 
- * https://hypertext.plus/html-document-v1.css
- * 
- */
+/*
+ Hypertext HTML Document CSS v1.0
+ https://hypertext.plus/html-document-v1.css
+ Copyright 2022 Russell Beattie
+ MIT-License
+*/
 
 :root {
-  --font-family: system-ui;
+
   --page-color: #fff;
-  --text-color: #111;
-  --title-color: #2e4057;
-  --heading-color: #000;
-  --link-color: inherit;
-  --inline-border-color: #ccc;
-  --inline-highlight-color: #000;
-  --highlight-color: #fafafa;
+
+  --page-font-color: #111;
+  --page-font: system-ui;
   --page-font-size: 15px;
+
+  --h1-color: #000;
+  --h1-font: system-ui;
   --h1-font-size: 2rem;
+
+  --heading-color: #333;
+  --heading-font: system-ui;
   --h2-font-size: 1.5rem;
   --h3-font-size: 1.25rem;
   --h4-font-size: 1rem;
   --h5-font-size: 1rem;
+
+  --link-color: #000888;
+  --dark-text-color: #000;
+  --line-color: #ccc;
+  --block-color: #fafafa;
+
 }
 
 html {
-  font-size: var(--page-font-size);
+  box-sizing: border-box;
+  font-size: var(--page-font-size) !important;
 }
 
 body {
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
-  background-color: var(--page-color);
-  color: var(--text-color);
-  font-family: var(--font-family);
-  max-width: 816px !important;
-  padding: 1rem 2rem 2rem;
-  margin: 1rem auto;
-  line-height: 1.5;
-  box-sizing: border-box;
   overflow-wrap: break-word;
+  background-color: var(--page-color) !important;
+  color: var(--page-font-color) !important;
+  font-family: var(--page-font) !important;
+  max-width: 816px !important;
+  padding: 1rem 2rem 2rem !important;
+  margin: 1rem auto !important;
+  line-height: 1.5;
+}
+
+a,
+a:visited {
+  color: var(--link-color);
+  text-decoration: none;
 }
 
 h1 {
+  color: var(--h1-color);
+  font-family: var(--h1-font);
   font-size: var(--h1-font-size);
   font-weight: 300;
   margin: 1rem 0 2rem;
-  line-height: 1;
-  color: var(--title-color);
+  line-height: 1.2;
+}
+
+h1 a {
+  color: var(--h1-color);
 }
 
 h2 {
-  font-size: var(--h2-font-size);
-  margin-top: 2rem;
   color: var(--heading-color);
-  border-bottom: 1px solid var(--inline-border-color);
+  font-family: var(--heading-font);
+  font-size: var(--h2-font-size);
+  margin: 2rem 0 1rem;
+  line-height: 1.2;
+  border-bottom: 1px solid var(--line-color);
+  padding-bottom: 0.5rem;
 }
 
 h3 {
+  color: var(--heading-color);
+  font-family: var(--heading-font);
   font-size: var(--h3-font-size);
+  margin: 2rem 0 1rem;
+  line-height: 1.25;
 }
 
 h4 {
+  color: var(--heading-color);
+  font-family: var(--heading-font);
   font-size: var(--h4-font-size);
+  margin: 2rem 0 1rem;
+  line-height: 1.4;
 }
 
 h5 {
+  color: var(--heading-color);
+  font-family: var(--heading-font);
   font-size: var(--h5-font-size);
+  margin: 2rem 0 1rem;
+  line-height: 1.5;
   font-style: italic;
 }
 
@@ -78,11 +109,11 @@ h3 + h4 {
   margin-top: 1rem;
 }
 
-h3,
-h4,
-h5,
-h6 {
-  margin: 2rem 0 1rem;
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
   color: var(--heading-color);
 }
 
@@ -129,26 +160,25 @@ time {
 
 code {
   padding: 0.25rem;
-  color: var(--inline-highlight-color);
-  background-color: var(--highlight-color);
+  color: var(--dark-text-color);
+  background-color: var(--block-color);
 }
 
-pre code {
+pre > code {
   display: block;
-  color: var(--text-color);
-  background-color: var(--highlight-color);
+  background-color: var(--block-color) !important;
   padding: 1rem;
-  margin: 1rem;
+  margin: 2rem 0 !important;
   white-space: pre-wrap;
   tab-size: 2;
-  border: 1px solid var(--inline-border-color);
+  border: 1px solid var(--line-color);
   line-height: 1.25;
 }
 
 blockquote {
-  margin: 1rem;
-  border-left: 2px solid var(--inline-border-color);
-  background-color: var(--highlight-color);
+  margin: 2rem;
+  border-left: 2px solid var(--line-color);
+  background-color: var(--block-color);
   padding: 1pt 1rem;
 }
 
@@ -160,7 +190,7 @@ blockquote h4 {
 
 hr {
   border-style: none none solid none;
-  border-color: var(--inline-border-color);
+  border-color: var(--line-color);
 }
 
 video,
@@ -176,6 +206,9 @@ img {
 
 figure {
   text-align: center;
+  margin: 2rem 1rem;
+  padding: 0.5rem 0.5rem 1.5rem;
+  border: 1px solid var(--line-color);
 }
 
 figcaption {
@@ -185,7 +218,7 @@ figcaption {
 
 table {
   border-collapse: collapse;
-  border: 1px solid var(--inline-border-color);
+  border: 1px solid var(--line-color);
   margin: 1.5rem 1rem;
   width: -moz-available;
   width: -webkit-fill-available;
@@ -193,94 +226,32 @@ table {
 }
 
 table thead {
-  background-color: var(--highlight-color);
+  background-color: var(--block-color);
 }
 
 table thead td {
   color: var(--table-head);
 }
 
+table tr:nth-child(2n) {
+  background-color: var(--block-color);
+}
+
 table td {
   padding: 0.5rem 1rem;
-  border: 1px solid var(--inline-border-color);
+  border: 1px solid var(--line-color);
 }
 
 details {
-  background-color: var(--highlight-color);
+  background-color: var(--block-color);
   padding: 1rem;
+}
+
+details a {
+  color: initial;
 }
 
 summary {
   cursor: pointer;
-}
-
-a,
-a:visited {
-  color: var(--link-color);
-  text-decoration: none;
-  padding-bottom: 2px;
-  border-bottom: 1px solid var(--inline-border-color);
-}
-
-h1 a,
-h2 a,
-h3 a,
-h4 a,
-h5 a,
-h6 a {
-  border: none;
-}
-
-/* Convenience classes */
-
-.hidden {
-  display: none;
-}
-
-body[contenteditable] .hidden {
-  display: initial;
-  outline: 1px dashed #ccc;
-}
-
-.left {
-  text-align: initial;
-}
-
-.right {
-  text-align: right;
-}
-
-.center {
-  text-align: center;
-}
-
-.full {
-  text-align: justify;
-}
-
-#table-of-contents a {
-  text-decoration: none;
-  border: none;
-}
-.toc-level-1 {
-  font-weight: bold;
-  padding-left: 1ch;
-  margin-top: 0.5rem;
-}
-.toc-level-2 {
-  font-weight: bold;
-  padding-left: 2ch;
-}
-.toc-level-3 {
-  padding-left: 3ch;
-}
-.toc-level-4 {
-  padding-left: 4ch;
-}
-.toc-level-5 {
-  padding-left: 5ch;
-}
-.toc-level-6 {
-  padding-left: 6ch;
 }
 

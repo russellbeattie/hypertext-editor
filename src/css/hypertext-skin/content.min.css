@@ -112,12 +112,13 @@ code[class*="language-"] ::selection {
 /* Code blocks */
 pre[class*="language-"] {
   padding: 1em;
-  margin: 0.5em 0;
+  margin: 2rem 0;
   overflow: auto;
+  border: 1px solid #ccc;
 }
 :not(pre) > code[class*="language-"],
 pre[class*="language-"] {
-  background: #f5f2f0;
+  background: #fafafa;
 }
 /* Inline code */
 :not(pre) > code[class*="language-"] {
@@ -640,6 +641,7 @@ table[style*="border-width: 0px"] caption,
 .mce-visualblocks div:not([data-mce-bogus]),
 .mce-visualblocks section,
 .mce-visualblocks article,
+.mce-visualblocks main,
 .mce-visualblocks blockquote,
 .mce-visualblocks address,
 .mce-visualblocks pre,
@@ -685,6 +687,9 @@ table[style*="border-width: 0px"] caption,
 .mce-visualblocks article {
   background-image: url(data:image/gif;base64,R0lGODlhKgAKAIABALu7u////yH5BAEAAAEALAAAAAAqAAoAAAI6jI+pywkNY3wG0GBvrsd2tXGYSGnfiF7ikpXemTpOiJScasYoDJJrjsG9gkCJ0ag6KhmaIe3pjDYBBQA7);
 }
+.mce-visualblocks main {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAKCAYAAADGmhxQAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAKKADAAQAAAABAAAACgAAAADiLzjyAAABNUlEQVQ4Ec2UPUrEQBTHdyYXsNNiOw+grZUWSSNewAWtFgVBxHPodnb2wp5AMJ+4dxA77WzFQhCTjL8ZdmAyhAVnYdnA473//30nmRkM1vhJ01RJpYwIPefclv7Mmu/hTI7l3RjXtv5QLbMsa/I8v6GowP5AntxiRVHs6xhkz+XBj/gOLQd+Y+NLjan3UpbllvUto6UQ4p0CB1VV7WB/+sXath3D3SPnvq8HXzPYsIcPopIkEfrTfSM/DHKKfnYr0WwDHEdRNEEfzbEb0rFZ8LZpmrsOuSSw/9aMAS9o0BmQZiM+vcI3pc9vXdcni/qxyAPhm8RsL4r7j88MSNEZSV/oVy95TNPjOI534UfImefvQBZQUsoryKjjCAT6FAemribNXDOraRXexdxl7qvUJ8eWWwf+D/wUqD1CkJocAAAAAElFTkSuQmCC);
+}
 .mce-visualblocks blockquote {
   background-image: url(data:image/gif;base64,R0lGODlhPgAKAIABALu7u////yH5BAEAAAEALAAAAAA+AAoAAAJPjI+py+0Knpz0xQDyuUhvfoGgIX5iSKZYgq5uNL5q69asZ8s5rrf0yZmpNkJZzFesBTu8TOlDVAabUyatguVhWduud3EyiUk45xhTTgMBBQA7);
 }
@@ -725,6 +730,7 @@ table[style*="border-width: 0px"] caption,
 .mce-visualblocks:not([dir=rtl]) div:not([data-mce-bogus]),
 .mce-visualblocks:not([dir=rtl]) section,
 .mce-visualblocks:not([dir=rtl]) article,
+.mce-visualblocks:not([dir=rtl]) main,
 .mce-visualblocks:not([dir=rtl]) blockquote,
 .mce-visualblocks:not([dir=rtl]) address,
 .mce-visualblocks:not([dir=rtl]) pre,
@@ -747,6 +753,7 @@ table[style*="border-width: 0px"] caption,
 .mce-visualblocks[dir=rtl] div:not([data-mce-bogus]),
 .mce-visualblocks[dir=rtl] section,
 .mce-visualblocks[dir=rtl] article,
+.mce-visualblocks[dir=rtl] main,
 .mce-visualblocks[dir=rtl] blockquote,
 .mce-visualblocks[dir=rtl] address,
 .mce-visualblocks[dir=rtl] pre,

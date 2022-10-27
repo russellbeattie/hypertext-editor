@@ -1,6 +1,4 @@
 
-/* eslint-env node */
-
 const fs = require('fs');
 const del = require('del');
 const glob = require('glob');
@@ -38,11 +36,9 @@ function copyLibs() {
     `${base}/tinymce/plugins/autosave/plugin.js`,
     `${base}/tinymce/plugins/codesample/plugin.js`,
     `${base}/tinymce/plugins/help/plugin.js`,
-    `${base}/tinymce/plugins/image/plugin.js`,
     `${base}/tinymce/plugins/insertdatetime/plugin.js`,
     `${base}/tinymce/plugins/link/plugin.js`,
     `${base}/tinymce/plugins/lists/plugin.js`,
-    `${base}/tinymce/plugins/media/plugin.js`,
     `${base}/tinymce/plugins/searchreplace/plugin.js`,
     `${base}/tinymce/plugins/table/plugin.js`,
     `${base}/tinymce/plugins/visualblocks/plugin.js`,

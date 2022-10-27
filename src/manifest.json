@@ -5,7 +5,7 @@
   "id": "/index.html",
   "scope": "/editor/",
   "start_url": "./",
-  "display": "standalone",
+  "display": "fullscreen",
   "theme_color": "#020887",
   "background_color": "#fff",
   "icons": [
@@ -44,7 +44,7 @@
     {
       "action": "./index.html",
       "accept": {
-        "text/html": [".doc.html",".htmd",".html"]
+        "text/html": [".html",".htmd"]
       },
       "launch_type": "single-client"
     }
@@ -55,9 +55,9 @@
       "url": "./index.html?file=%s"
     }
   ],
-   "display_override": ["standalone"],
+   "display_override": ["fullscreen", "standalone", "minimal-ui"],
    "dir": "auto",
   "lang": "en",
-  "orientation": "landscape-primary",
+  "orientation": "any",
   "categories": ["productivity"]
 }

@@ -13,9 +13,6 @@
     "last 2 versions"
   ],
   "dependencies": {
-    "@babel/core": "^7.5.0",
-    "@babel/preset-env": "^7.5.2",
-    "babel-eslint": "^10.0.2",
     "del": "^5.0.0",
     "glob": "8.0.3",
     "gulp": "^4.0.2",

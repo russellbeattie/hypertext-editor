@@ -2,8 +2,50 @@
 
 var currentHTMLFileHandle = null;
 var toOpenHTMLFileHandle = null;
+var dirHandle = null;
 
 var fileSystemSupport = 'showOpenFilePicker' in window;
+
+
+/* *********************** */
+
+function getFileSystemSupport(){
+  return fileSystemSupport;
+}
+
+/* *********************** */
+
+function deleteWorkingFolder(){
+
+  dirHandle = null;
+
+}
+
+
+/* *********************** */
+
+function getWorkingFolder(){
+
+  if(dirHandle){
+    return dirHandle.name;
+  } else {
+    return '';
+  }
+
+}
+
+/* *********************** */
+
+async function setWorkingFolder(){
+
+  try {
+    dirHandle = await window.showDirectoryPicker({mode: 'readwrite'});
+
+    postMessage({'dirHandle': dirHandle});
+  } catch(err){
+    console.log('Directory problem');
+  }
+}
 
 
 /* *********************** */
@@ -159,7 +201,6 @@ async function writeHTMLFile(fileHandle, contents) {
 /* *********************** */
 
 function getNewHTMLFileHandle() {
-  let dateText = getDateTimeText();
 
   if (currentHTMLFileHandle) {
     var saveAsHTMLFileHandle = currentHTMLFileHandle;
@@ -167,7 +208,7 @@ function getNewHTMLFileHandle() {
     var saveAsHTMLFileHandle = 'desktop';
   }
   const opts = {
-    suggestedName: dateText + '.doc.html',
+    suggestedName: getSuggestedFileName(),
     startIn: saveAsHTMLFileHandle,
     types: [
       {
@@ -275,9 +316,7 @@ function openHTMLFileFromInput(){
 
 function saveHTMLFileAsDownload(currentHTMLFileHandle){
   
-  let dateText = getDateTimeText();
-  
-  let filename = dateText + '.doc.html';
+  let filename = getSuggestedFileName();
 
   if(currentHTMLFileHandle){
     filename = currentHTMLFileHandle.name;
@@ -347,10 +386,8 @@ async function importCSSFile(){
 /* *********************** */
 
 async function exportCSSFile(){
-  
-  let dateText = getDateTimeText();
 
-  let suggestedFileName = dateText + '.doc.css';
+  let suggestedFileName = getSuggestedFileName().replace('.html') + '.css';
 
   let saveAsHTMLFileHandle = 'desktop';
 
@@ -463,9 +500,7 @@ function exportCSSFileAsDownload(suggestedFileName){
 
 async function exportUnformattedHTML(){
 
-  let dateText = getDateTimeText();
-
-  let suggestedFileName = dateText + '-unformatted.doc.html';
+  let suggestedFileName = 'unformatted' + getSuggestedFileName();
 
   let saveAsHTMLFileHandle = 'desktop';
 
@@ -475,7 +510,7 @@ async function exportUnformattedHTML(){
     
     let filename = currentHTMLFileHandle.name;
     if(filename){
-      filename = filename.substring(0, filename.lastIndexOf('.')) + '-unformatted.html';
+      filename = 'unformatted' + filename;
       suggestedFileName = filename;
     }
   }
@@ -547,18 +582,86 @@ function exportUnformattedHTMLAsDownload(suggestedFileName){
 
 /* *********************** */
 
-function getDateTimeText(){
+async function getScript(){
 
-  let dt = new Date();
+  if(fileSystemSupport == false){
+    let scriptText = await getScriptFromInput();
+    return scriptText;
+  }
 
-  let y = dt.getFullYear();
-  let m = dt.getMonth() + 1;  
-  let d = dt.getDate();
-  let h = dt.getHours();
-  let t = dt.getMinutes();
+  let fileHandle;
 
-  let dateTime = y + '-' + m + '-' + d+ '-' + h + '-' +  t;
+  try {
+      [fileHandle] = await window.showOpenFilePicker();
+    } catch (ex) {
+      if (ex.name === 'AbortError') {
+        return;
+      }
+      const msg = 'An error occured trying to open the file.';
+      console.error(msg, ex);
+      alert(msg);
+  }
+  
+  if (!fileHandle) {
+    return;
+  }
 
-  return dateTime;
+  const file = await fileHandle.getFile();
+
+  try {
+    let scriptText = await file.text();
+
+    return scriptText;
+
+  } catch (ex) {
+    const msg = `An error occured reading ${currentHTMLFileHandle.name}`;
+    console.error(msg, ex);
+    alert(msg);
+  }
 
 }
+
+/* *********************** */
+
+function getScriptFromImport(){
+
+  return new Promise ((resolve, reject) => {
+
+    let input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'text/css');
+
+    input.addEventListener('change', function(e){
+
+      let file = e.target.files[0];
+
+      let reader = new FileReader();
+
+      reader.addEventListener('loadend', function(e){
+
+        let scriptText = e.srcElement.result;
+        
+        resolve(scriptText);
+
+      });
+
+      reader.addEventListener('error', function(e){
+        reject();
+      });
+
+      reader.addEventListener('abort', function(e){
+        reject();
+      });
+      
+      reader.readAsText(file);
+    });
+
+    input.click();
+
+  });
+
+}
+
+/* *********************** */
+
+

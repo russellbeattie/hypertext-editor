@@ -1,40 +1,148 @@
 
-/* *********************** */
+function editImage() {
+  let initData =  {
+    src: {
+      value: '',
+    },
+    alt: '',
+    captionText: '',
+    caption: false
+  };
+  
+  let update = false;
+  let items = [];
 
-function showInsertTag() {
+  let selectedEl = tinymce.activeEditor.selection.getNode();
 
-  let tagText = tinymce.activeEditor.selection.getNode().textContent;
+  if(selectedEl.nodeName.toLowerCase() == 'figure'){
+    selectedEl = selectedEl.querySelector('img');
+  }
+
+  if(selectedEl.nodeName.toLowerCase() == 'img'){
+    update = true;
+    initData.src.value = selectedEl.getAttribute('src') || '';
+    initData.alt = selectedEl.getAttribute('alt') || '';
+    items = [
+        { type: 'urlinput', label: 'Path, URL or Embed Image', name: 'src', filetype: 'image' },
+        { type: 'input', label: 'Alt Text', name: 'alt' }
+      ];
+  } else {
+    items = [
+        { type: 'urlinput', label: 'Path, URL or Embed Image', name: 'src', filetype: 'image' },
+        { type: 'input', label: 'Alt Text', name: 'alt' },
+        { type: 'input', label: 'Caption', name: 'captionText' },
+        { type: 'checkbox', label: 'Figure with Caption', name: 'caption' },
+      ];
+  }
 
   tinymce.activeEditor.windowManager.open({
-    title: 'Insert Tag',
+    title: 'Add / Edit Image',
     size: 'normal',
     body: {
       type: 'panel',
-      items: [{ type: 'input', name: 'tag' }],
+      items: items,
+    },
+    initialData:initData,
+    buttons: [
+      { type: 'cancel', name: 'cancel', text: 'Cancel' },
+      { type: 'submit', name: 'save', text: 'Save', primary: true },
+    ],
+    onSubmit: function (api) {
+      let data = api.getData();
+
+      let src = data.src.value;
+      let alt = data.alt || '';
+
+      if(src == ''){
+         api.close();
+         return;
+      }
+
+      if(update){
+
+        selectedEl.setAttribute('src', src);
+        selectedEl.setAttribute('alt', alt);
+      
+      } else {
+
+        let imgEl = document.createElement('img');
+        imgEl.setAttribute('src', src);
+        if(data.alt){
+          imgEl.setAttribute('alt', alt);
+        }
+
+        if (data.caption) {
+          let figureEl = document.createElement('figure');
+          figureEl.classList.add('image');
+          figureEl.setAttribute('contenteditable', 'false');
+
+          let figCaptionEl = document.createElement('figcaption');
+          figCaptionEl.textContent = data.captionText || 'Caption';
+
+          figureEl.append(imgEl);
+          figureEl.append(figCaptionEl);
+
+          tinymce.activeEditor.insertContent(figureEl.outerHTML);
+
+        } else {
+        
+          tinymce.activeEditor.insertContent(imgEl.outerHTML);
+        
+        }
+
+      }
+      api.close();
+    }
+  });
+}
+
+/* *********************** */
+
+function editEmbed() {
+
+  let selectedEl = tinymce.activeEditor.selection.getNode();
+
+  // let markup = tinymce.activeEditor.serializer.serialize(tinymce.activeEditor.selection.getNode());
+  let update = false;
+  let markup = '';
+
+  if(selectedEl.classList.contains('embed')){
+    update = true;
+    markup = selectedEl.innerHTML;
+    // markup = tinymce.activeEditor.selection.getContent();
+  } 
+
+  tinymce.activeEditor.windowManager.open({
+    title: 'Add / Edit Embed',
+    size: 'medium',
+    body: {
+      type: 'panel',
+      items: [{ type: 'textarea', name: 'markup' }],
     },
     initialData: {
-      tag: tagText
+      markup: markup,
     },
     buttons: [
       { type: 'cancel', name: 'cancel', text: 'Cancel' },
       { type: 'submit', name: 'save', text: 'Save', primary: true },
     ],
     onSubmit: function (api) {
-      let tag = api.getData().tag;
+      let markup = api.getData().markup;
 
-      let tagEl = document.createElement('ins');
-      tagEl.classList.add('tag');
-      tagEl.textContent = tag;
-
-      let tagHtml = tagEl.outerHTML;
-
-      tinymce.activeEditor.insertContent(tagHtml);
+      if(update){
+        tinymce.activeEditor.selection.setContent(markup);
+      } else {
+        let embedEl = document.createElement('div');
+        embedEl.classList.add('embed');
+        embedEl.setAttribute('contenteditable', 'false');
+        embedEl.innerHTML = markup;
+        tinymce.activeEditor.selection.setContent(embedEl.outerHTML);
+      }
 
       api.close();
     },
   });
 }
-
 
 
 /* *********************** */
@@ -43,7 +151,7 @@ function showEditBlockMenu() {
 
   let selectedEl = tinymce.activeEditor.selection.getNode();
 
-  let markup = selectedEl.outerHTML;
+  let markup = tinymce.activeEditor.serializer.serialize(tinymce.activeEditor.selection.getNode());
 
   if(selectedEl.nodeName.toLowerCase() == 'body'){
     markup = selectedEl.innerHTML;
@@ -65,7 +173,7 @@ function showEditBlockMenu() {
     ],
     onSubmit: function (api) {
       let markup = api.getData().markup;
-      tinymce.activeEditor.selection.getNode().outerHTML = markup;
+      tinymce.activeEditor.selection.setContent(markup);
       api.close();
     },
   });
@@ -109,13 +217,14 @@ function showAttributesMenu() {
 /* *********************** */
 
 function createTableOfContents(innerFlag) {
-  let doc = tinymce.activeEditor.dom.getRoot();
+  let doc = tinymce.activeEditor.getDoc();
 
   let headers = doc.querySelectorAll('h1, h2, h3, h4, h5');
 
   var details = document.createElement('details');
   details.id = 'table-of-contents';
   details.setAttribute('contenteditable', 'false');
+  details.setAttribute('open', 'true');
 
   var summary = document.createElement('summary');
   summary.textContent = 'Table of Contents';
@@ -137,6 +246,7 @@ function createTableOfContents(innerFlag) {
 
       let anchor = document.createElement('a');
       anchor.setAttribute('class', 'toc-level-' + level);
+      anchor.setAttribute('style', 'padding-left: ' + level + 'ch;');
       anchor.href = '#' + header.id;
       anchor.textContent = ' • ' + header.textContent.trim();
 
@@ -147,10 +257,10 @@ function createTableOfContents(innerFlag) {
   });
 
   if (innerFlag) {
-    return details.innerHTML;
+    tinymce.activeEditor.dom.replace(details, tinymce.activeEditor.dom.select('#table-of-contents'));
   } else {
     tinymce.activeEditor.dom.remove(tinymce.activeEditor.dom.select('#table-of-contents'));
-    editor.insertContent(tocStr);
+    tinymce.activeEditor.selection.setContent(details.outerHTML);
   }
 }
 
@@ -162,10 +272,31 @@ function beforeGetContent() {
   let toc = dom.get('table-of-contents');
 
   if (toc) {
-    let htmlText = createTableOfContents(true);
-    dom.setHTML(toc, htmlText);
+    createTableOfContents(true);
   }
 }
+
+/* *********************** */
+
+async function runMacro(){
+
+  let scriptText = await getScript();
+
+  if(scriptText){
+    try {
+      let scriptEl = document.createElement('script');
+      scriptEl.textContent = scriptText;
+
+      tinymce.activeEditor.getDoc().head.append(scriptEl);
+    } catch (e){
+      alert('Script Error: ' + e.name + ' ' + e.message);
+
+    }
+
+  }
+
+}
+
 
 /* *********************** */
 
@@ -174,9 +305,19 @@ var codeEditor;
 function editCode(title, codeText, callback) {
   let editor = tinymce.activeEditor;
 
+  let mode = 'text/html';
+  if(title.includes('Tag')){
+    mode = 'text/javascript';
+  }
+
+  let size = 'large';
+  if(title.includes('Block')){
+    size = 'medium';
+  }
+
   editor.windowManager.open({
     title: title,
-    size: 'large',
+    size: size,
     body: {
       type: 'panel',
       items: [
@@ -202,7 +343,7 @@ function editCode(title, codeText, callback) {
                     lineNumbers: true,
                     lineWrapping: true,
                     matchBrackets: true,
-                    mode: 'text/html',
+                    mode: mode,
                     saveCursorPosition: true,
                     styleActiveLine: true,
                     tabSize: 2,
@@ -239,6 +380,77 @@ function editCode(title, codeText, callback) {
 
 /* *********************** */
 
+function editBlock(){
+
+  let selectedEl = tinymce.activeEditor.selection.getNode();
+
+  // let markup = selectedEl.outerHTML;
+
+  let blockContentHTML = tinymce.activeEditor.serializer.serialize(tinymce.activeEditor.selection.getNode());
+
+  if(selectedEl.nodeName.toLowerCase() == 'body'){
+    blockContentHTML = selectedEl.innerHTML;
+  }
+
+  editCode('Edit Block', blockContentHTML, function (returnText) {
+      
+      if(blockContentHTML !== ''){
+        // tinymce.activeEditor.selection.setContent(returnText);
+        tinymce.activeEditor.dom.setOuterHTML(tinymce.activeEditor.selection.getNode(), returnText);
+      } else {
+        tinymce.activeEditor.insertContent(returnText);
+      }
+
+  });
+
+
+}
+
+
+/* *********************** */
+
+function editTag(){
+
+  let tagText = '';
+
+  let origNode = tinymce.activeEditor.selection.getNode();
+
+  let tagContentHTML = '';
+  if(origNode.classList.contains('tag')){
+    tagContentHTML = tinymce.activeEditor.serializer.serialize(tinymce.activeEditor.selection.getNode());
+  }
+
+  if(tagContentHTML !== ''){
+    var templateEl = document.createElement('template');
+    templateEl.innerHTML = tagContentHTML;
+    let tagEl = templateEl.content.firstChild;
+
+    tagText = tagEl.textContent;
+  }
+
+  editCode('Edit Tag', tagText, function (returnText) {
+      
+      let tagEl = document.createElement('pre');
+      tagEl.classList = origNode.classList;
+      tagEl.classList.add('tag');
+      tagEl.setAttribute('contenteditable', 'false');
+      tagEl.id = origNode.id;
+      tagEl.setAttribute('style', 'display:none;');
+      tagEl.textContent = returnText.trim();
+
+      let tagText = tagEl.outerHTML;
+
+      if(tagContentHTML !== ''){
+        tinymce.activeEditor.selection.setContent(tagText);
+      } else {
+        tinymce.activeEditor.insertContent(tagText);
+      }
+
+  });
+}
+
+/* *********************** */
+
 function editHead() {
   let headEl = currentDocument.querySelector('head');
 
@@ -264,6 +476,7 @@ function editHead() {
 
 function editBody() {
   let editor = tinymce.activeEditor;
+
   let bodyText = editor.getContent({ format: 'html' });
 
   currentDocument.body.innerHTML = bodyText;
@@ -381,11 +594,22 @@ function editPrefs() {
 
 
       localStorage.setItem('author', data.author) || '';
-      localStorage.setItem('localServer', localServer || '');
+
+      if(localServer == ''){
+        localStorage.removeItem('localServer');
+      } else {
+        localStorage.setItem('localServer', localServer);
+      }
       let baseEl = editor.getDoc().querySelector('head base');
       if(baseEl){
-        baseEl.href = localServer;
+        if(localServer == ''){
+          baseEl.remove();
+        } else {
+          baseEl.href = localServer;
+        }
       }
+
+
 
       if(localServer !== currentLocalServer){
         editor.execCommand('mceCleanup');
@@ -447,6 +671,9 @@ function openCSSEditor(editor, wrapperEl) {
       styleEl.textContent = newCSSText.trim();
       tinymce.activeEditor.getDoc().querySelector('#mceDefaultStyles').textContent = '';
       tinymce.activeEditor.dom.addStyle(newCSSText);
+      tinymce.activeEditor.setDirty(true);
+
+      
     });
   }
 }
@@ -497,6 +724,9 @@ function pastePreprocess(editor, args) {
   let content = el.innerHTML;
 
   content = content.replaceAll('<br />', '<p>');
+  content = content.replaceAll('<div', '<p');
+  content = content.replaceAll('</div>', '</p>');
+
   args.content = content;
 }
 
@@ -511,8 +741,26 @@ function walkDOM(node, func) {
 
 function cleanNode(node) {
   if (node.attributes) {
-    while (node.attributes.length > 0) {
-      node.removeAttributeNode(node.attributes[0]);
+    let atts = node.attributes;
+    let count = atts.length;
+    let names = [];
+    for(let x = 0; x < count; x++){
+      names.push(atts[x].name);
+    }
+    for(let i = 0; i < names.length; i++){
+      let name = names[i];
+      if(name == 'height' || name == 'width'){
+        node.removeAttribute(name);
+      }
+      if(name == 'style'){
+          let style = node.style;
+          for (let y = 0; y < style.length; ++y) {
+              let item = style.item(y);
+              if(item == 'font-family' || item  == 'font-style' || item == 'width' || item == 'height'){
+                node.style[item] = null;
+              }
+          }
+      }
     }
   }
 }

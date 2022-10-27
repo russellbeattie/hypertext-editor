@@ -8,7 +8,7 @@ let textMenuToggle = (localStorage.getItem('textMenu') === 'true');
 
 toggleTextMenu(textMenuToggle);
 
-let localServer = localStorage.getItem('localServer') || '';
+let localServer = localStorage.getItem('localServer') || window.location.pathname;
 
 function editorSetup(editor) {
 
@@ -22,6 +22,8 @@ function editorSetup(editor) {
   editor.ui.registry.addIcon('cssfile-icon', '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M9.8 14.5h1.6l.8-2.3h3.7l.8 2.3h1.5l-3.4-9h-1.6Zm2.9-3.6L14 7.1l1.4 3.8ZM8 18q-.8 0-1.4-.6Q6 16.8 6 16V4q0-.8.6-1.4Q7.2 2 8 2h12q.8 0 1.4.6.6.6.6 1.4v12q0 .8-.6 1.4-.6.6-1.4.6Zm0-2h12V4H8v12Zm-4 6q-.8 0-1.4-.6Q2 20.8 2 20V6h2v14h14v2ZM8 4v12V4Z"/></svg>');
   editor.ui.registry.addIcon('textmenu-icon', '<svg width="24" height="24"><path d="M18 11H6V9h12v2Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M2 16a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v8Zm3 1h14a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1Z"/></svg>');
   editor.ui.registry.addIcon('export-icon', '<svg width="24" height="24"><path d="m16.95 5.97-1.41 1.41L13 4.85v12.2h-2V4.84L8.46 7.38 7.05 5.97 12 1.02l4.95 4.95Z"/><path d="M5 20.98v-10h4v-2H3v14h18v-14h-6v2h4v10H5Z"/></svg>');
+  editor.ui.registry.addIcon('folder-icon', '<svg width="24" height="24"><path fill-rule="evenodd" clip-rule="evenodd" d="M4 1.5a2 2 0 0 0-2 2v1.17A3 3 0 0 0 0 7.5v12a3 3 0 0 0 3 3h18a3 3 0 0 0 3-3v-12a3 3 0 0 0-3-3h-9.13A4 4 0 0 0 8 1.5H4Zm5.73 3A2 2 0 0 0 8 3.5H4v1h5.73ZM3 6.5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-12a1 1 0 0 0-1-1H3Z"/></svg>');
+  editor.ui.registry.addIcon('coffee-icon', '<svg width="24" height="24"><path d="M6 2.5a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0v-2a1 1 0 0 0-1-1Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M13 21.5a6 6 0 0 0 5.92-5H19a4 4 0 0 0 0-8v-1H1v8a6 6 0 0 0 6 6h6ZM3 9.5v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4v-6H3Zm18 3a2 2 0 0 1-2 2v-4a2 2 0 0 1 2 2Z"/><path d="M9 3.5a1 1 0 1 1 2 0v2a1 1 0 1 1-2 0v-2ZM14 2.5a1 1 0 0 0-1 1v2a1 1 0 1 0 2 0v-2a1 1 0 0 0-1-1Z"/></svg>');
   editor.ui.registry.addIcon('File', '<svg width="24" height="24"><path d="M10 12a1 1 0 1 0 0 2h4a1 1 0 0 0 0-2h-4Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M4 2a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h16a3 3 0 0 0 3-3V5a3 3 0 0 0-3-3H4Zm16 2H4a1 1 0 0 0-1 1v3h18V5a1 1 0 0 0-1-1ZM3 19v-9h18v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Z"/></svg>');
   editor.ui.registry.addIcon('Edit', '<svg width="24" height="24"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.26 2.3a1 1 0 0 0-1.41 0l-.87.87a3 3 0 0 0-3.42.58l-10.6 10.6 5.65 5.67L21.21 9.4a3 3 0 0 0 .6-3.42l.87-.87a1 1 0 0 0 0-1.41l-1.42-1.42ZM17 10.8 10.6 17.2l-2.83-2.83 6.39-6.38L17 10.8ZM18.8 9l1-1a1 1 0 0 0 0-1.41l-1.42-1.41a1 1 0 0 0-1.41 0l-1 .99 2.83 2.83Z"/><path d="m2 22.95 2.12-7.78 5.66 5.66L2 22.95Z"/></svg>');
   editor.ui.registry.addIcon('View', '<svg width="24" height="24"><path d="M3 3h6v2H5v4H3V3ZM3 21h6v-2H5v-4H3v6ZM15 21h6v-6h-2v4h-4v2ZM21 3h-6v2h4v4h2V3Z"/></svg>');
@@ -29,8 +31,51 @@ function editorSetup(editor) {
   editor.ui.registry.addIcon('Format', '<svg width="24" height="24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.95 3.2a1 1 0 0 0-.95-.57 1 1 0 0 0-.95.58L5.14 15.9a1 1 0 1 0 1.8.84l1.46-3.1h7.2l1.45 3.1a1 1 0 0 0 1.81-.84L12.95 3.2Zm1.72 8.43L12 5.91l-2.67 5.72h5.34Z"/><path d="M6 19.37a1 1 0 0 0 0 2h12a1 1 0 1 0 0-2H6Z"/></svg>');
   editor.ui.registry.addIcon('Tools', '<svg width="24" height="24"><path fill-rule="evenodd" clip-rule="evenodd" d="M17 5.5h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-12c0-1.1.9-2 2-2h3a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3Zm-3-1h-4a1 1 0 0 0-1 1h6a1 1 0 0 0-1-1Zm6 3H4v2h16v-2Zm-16 12v-8h3v2h4v-2h2v2h4v-2h3v8H4Z"/></svg>');
   editor.ui.registry.addIcon('Table', '<svg width="24" height="24"><path d="M4 4h4v4H4V4ZM4 10h4v4H4v-4ZM8 16H4v4h4v-4ZM10 4h4v4h-4V4ZM14 10h-4v4h4v-4ZM10 16h4v4h-4v-4ZM20 4h-4v4h4V4ZM16 10h4v4h-4v-4ZM20 16h-4v4h4v-4Z"/></svg>');
-  editor.ui.registry.addIcon('Help', '<svg width="24" height="24"><path d="M11 10.98a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0v-6ZM12 6.05a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20ZM4 12a8 8 0 1 0 16 0 8 8 0 0 0-16 0Z"/></svg>');
+  editor.ui.registry.addIcon('Help', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path fill-rule="evenodd" d="M12 0a12 12 0 1 1 0 24 12 12 0 0 1 0-24Zm0 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 9a2 2 0 0 1 2 2v5a2 2 0 1 1-4 0v-5c0-1.1.9-2 2-2Zm0-6a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z"/></svg>');
   editor.ui.registry.addIcon('Paragraphs', '<svg width="24" height="24"><path d="M8.02 6.98a1 1 0 0 0 0 2h7.95a1 1 0 0 0 0-2H8.02ZM7.02 12a1 1 0 0 1 1-1h7.95a1 1 0 0 1 0 2H8.02a1 1 0 0 1-1-1ZM8.02 15.01a1 1 0 0 0 0 2h7.96a1 1 0 0 0 0-2H8.02Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6Zm3-1h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/></svg>');
+
+  /* *********************** */
+
+  editor.ui.registry.addMenuItem('embed', {
+    icon: 'embed',
+    text: 'Embed...',
+    onAction: function () {
+      editEmbed();
+    },
+  });
+
+  editor.ui.registry.addButton('embed', {
+    icon: 'embed',
+    onAction: function () {
+      editEmbed();
+    },
+  });
+
+  editor.ui.registry.addContextMenu('embed', {
+    update: (element) => element.classList.contains('embed') ? 'embed' : ''
+  });
+
+
+  /* *********************** */
+
+  editor.ui.registry.addMenuItem('image', {
+    icon: 'image',
+    text: 'Image...',
+    onAction: function () {
+      editImage();
+    },
+  });
+
+  editor.ui.registry.addButton('image', {
+    icon: 'image',
+    onAction: function () {
+      editImage();
+    },
+  });
+
+  editor.ui.registry.addContextMenu('image', {
+    update: (element) => (element.nodeName.toLowerCase() == 'img' || element.nodeName.toLowerCase() == 'figure') ? 'image' : ''
+  });
 
   /* *********************** */
 
@@ -59,40 +104,61 @@ function editorSetup(editor) {
     icon: 'sourcecode',
     text: 'Edit Block...',
     onAction: function () {
-      showEditBlockMenu();
+      editBlock();
     },
   });
 
   editor.ui.registry.addButton('edit-block', {
     icon: 'sourcecode',
     onAction: function () {
-      showEditBlockMenu();
+      editBlock();
     },
   });
 
   editor.ui.registry.addContextMenu('edit-block', {
-    update: (element) => (element.nodeName.toLowerCase() == 'body') ? '' : 'edit-block'
+    update: (element) => {
+      if( element.nodeName.toLowerCase() !== 'body'){
+        return 'edit-block'
+      } else {
+        return '';
+      }
+    }
   });
 
   /* *********************** */
 
-  editor.ui.registry.addMenuItem('add-tag', {
+  editor.ui.registry.addMenuItem('context-edit-tag', {
     icon: 'addtag',
-    text: 'Tag',
+    text: 'Edit Tag',
     onAction: function () {
-      showInsertTag();
+      editTag();
     },
   });
 
-  editor.ui.registry.addButton('add-tag', {
+
+  editor.ui.registry.addMenuItem('edit-tag', {
     icon: 'addtag',
+    text: 'Add Tag',
     onAction: function () {
-      showInsertTag();
+      editTag();
     },
   });
 
-  editor.ui.registry.addContextMenu('add-tag', {
-    update: (element) => !element.classList.contains('tag') ? '' : 'add-tag'
+  editor.ui.registry.addButton('edit-tag', {
+    icon: 'addtag',
+    onAction: function () {
+      editTag();
+    },
+  });
+
+  editor.ui.registry.addContextMenu('edit-tag', {
+    update: (element) => {
+      if(element.nodeName.toLowerCase() == 'pre' && element.classList.contains('tag')){
+        return 'context-edit-tag';
+      } else {
+        return '';
+      }
+    }
   });
 
   /* *********************** */
@@ -117,6 +183,24 @@ function editorSetup(editor) {
       return () => {};
     },
   });
+
+  /* *********************** */
+
+  editor.ui.registry.addButton('run-macro', {
+    icon: 'arrow-right',
+    onAction: function () {
+      runMacro();
+    },
+  });
+
+  editor.ui.registry.addMenuItem('run-macro', {
+    icon: 'arrow-right',
+    text: 'Run Macro...',
+    onAction: function () {
+      runMacro();
+    },
+  });
+
 
   /* *********************** */
 
@@ -465,7 +549,7 @@ function editorSetup(editor) {
   });
 
   editor.addShortcut('Meta+Shift+I', 'Image', function () {
-    tinyMCE.execCommand('mceImage');
+    editImage();
   });
 
   editor.addShortcut('Meta+Shift+L', 'Justify left', function () {
@@ -563,7 +647,7 @@ function editorSetup(editor) {
 
     /* *********************** */
 
-    editor.on('BeforeGetContent', beforeGetContent());
+    editor.on('BeforeGetContent', beforeGetContent);
 
     /* *********************** */
 
@@ -601,5 +685,35 @@ function editorSetup(editor) {
         return (event.returnValue = 'Are you sure you want to exit?');
       }
     });
+
+    if(navigator.onLine == false){
+      (async function() {
+        // stupid iframe pwa bug
+
+        let cssText = '';
+        let response;
+
+        response = await fetch(skinName + '/content.min.css');
+        if (response.ok) {
+          let skinCSSText = await response.text();
+          cssText += skinCSSText;
+        }
+        response = await fetch(contentCSSUrl);
+        if (response.ok) {
+          let contentCSSText = await response.text();
+          cssText += contentCSSText;
+        }
+        let styleEl = document.createElement('style');
+        styleEl.textContent = cssText;
+        tinymce.activeEditor.getDoc().head.append(styleEl);
+
+      })();
+    }
+
+
+    /* *********************** */
+
+
+
   });
 }

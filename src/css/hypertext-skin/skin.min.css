@@ -2191,7 +2191,7 @@ body.tox-dialog__disable-scroll {
   overflow: hidden;
   text-transform: none;
   width: auto;
-  margin: 0 4px;
+  margin: 0 2px;
 }
 .tox .tox-mbtn[disabled] {
   background-color: transparent;

@@ -10,11 +10,13 @@ async function getHTMLTemplate() {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src * data: blob:; style-src 'unsafe-inline' *; script-src 'none'; child-src 'none';" />
 <title></title>
 <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAA10lEQVRIie3VP2pCQRDH8U+CSfQyHiCSJoVExcNYpQu2VjlIihRpUmiVfwjeR0PAWLg2q29976HwBL+wLMzMzm9md9nl1LnIsHfQ3LN2hkkZ0Tb+c4xf9MsIPIUE9UTMMMQs0E0lu0zYFjmKucErekUEinKNF9wfSwAaeMNt7KiVTPiJUWR7tL4g34cQGIcRC2xxqC3K5OgCebboGXcZvg8MUosr0UGywn1UooPzGWyxDHPquY7ZxC5jx64OfsI8LyCwYRobsr7MB7RwlTPxH77wXqKoirMCzd8mEpBQY98AAAAASUVORK5CYII=">
 </head>
 <body>
+<main>
+<p></p>
+</main>
 </body>
 </html>`;
 
@@ -167,12 +169,13 @@ async function loadDocument(htmlText) {
 
   tinymce.activeEditor.undoManager.clear();
   tinymce.activeEditor.setDirty(false);
+
+  tinymce.activeEditor.getWin().scroll(0,0);
 }
 
 /* *********************** */
 
 function getDocumentHTMLToSave() {
-  let title = '';
 
   let headEl = currentDocument.querySelector('head');
 
@@ -180,19 +183,7 @@ function getDocumentHTMLToSave() {
 
   jsonld.dateModified = new Date().toISOString();
 
-  let titleEl = headEl.querySelector('title');
-
-  if (titleEl) {
-    if (titleEl.textContent == '') {
-      let h1 = tinymce.activeEditor.dom.getRoot().querySelector('h1');
-      if (h1) {
-        title = h1.textContent;
-        titleEl.textContent = title;
-      }
-    } else {
-      title = titleEl.textContent;
-    }
-  }
+  let title = getTitle();
 
   jsonld.name = title;
 
@@ -202,7 +193,7 @@ function getDocumentHTMLToSave() {
 
   currentDocument.body.innerHTML = content;
 
-  let htmlText = currentDocument.documentElement.outerHTML;
+  let htmlText = '<!DOCTYPE html>\n' + currentDocument.documentElement.outerHTML;
 
   return htmlText;
 }
@@ -210,7 +201,7 @@ function getDocumentHTMLToSave() {
 /* *********************** */
 
 function getUnformattedHTML(){
-
+  
   let newDoc = document.implementation.createHTMLDocument();
   newDoc.body.innerHTML = tinymce.activeEditor.getContent({ format: 'html' });
 
@@ -288,4 +279,65 @@ async function resetCSSDefault(){
 }
 
 /* *********************** */
+
+function getTitle(){
+
+  let title = '';
+
+  let titleEl = currentDocument.querySelector('title');
+
+  if (titleEl) {
+    if (titleEl.textContent == '') {
+      let h1El = tinymce.activeEditor.getDoc().querySelector('h1');
+      if (h1El) {
+        title = h1El.textContent.trim();
+        titleEl.textContent = title;
+      }
+    } else {
+      title = titleEl.textContent;
+    }
+  }
+
+  return title;
+
+}
+
+
+/* *********************** */
+
+function getSuggestedFileName(){
+
+  let filename = '';
+
+  let title = getTitle();
+  if(title !== ''){
+    filename = title.trim().replace(/[^a-z0-9]/gi, '-').toLowerCase() + '.html';
+  } else {
+    let dateText = getDateTimeText();
+    filename = dateText + '.html';
+  }
+
+  return filename;
+
+
+}
+
+
+/* *********************** */
+
+function getDateTimeText(){
+
+  let dt = new Date();
+
+  let y = dt.getFullYear();
+  let m = ((dt.getMonth() + 1) + '').padStart(2, '0');  
+  let d = (dt.getDate() + '').padStart(2, '0');
+  let h = (dt.getHours() + '').padStart(2, '0');
+  let t = (dt.getMinutes() + '').padStart(2, '0');
+
+  let dateTime = y + '-' + m + '-' + d+ '-' + h + '-' +  t;
+
+  return dateTime;
+
+}
 
