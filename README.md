@@ -47,7 +47,7 @@ Also thanks to the Google dev relations guys for the file stuff here:
 **Clone the repository**
 
 ```
-git clone https://github.com/manjularajamani/hypertext-editor.git
+git clone https://github.com/russellbeattie/hypertext-editor.git
 
 cd hypertext-editor
 
