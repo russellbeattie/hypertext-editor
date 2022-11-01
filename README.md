@@ -42,3 +42,17 @@ in showing me how some of the wonky bits worked.
 Also thanks to the Google dev relations guys for the file stuff here:
 <https://googlechromelabs.github.io/text-editor/>.
 
+## How to run this app using Docker
+
+**Clone the repository**
+
+```
+git clone https://github.com/manjularajamani/hypertext-editor.git
+
+cd hypertext-editor
+
+docker build -t <image_name> .
+
+docker run -d -it --name <container_name> <image_name>
+
+```
