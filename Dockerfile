@@ -1,11 +1,20 @@
-From node:latest
+FROM node:16.15.0-alpine
+
+WORKDIR /opt/app-root/src
 
 COPY . .
 
-WORKDIR /app
+ENV USER_NAME=hyper \
+    USER_ID=1001 \
+    GROUP_ID=0
 
-RUN npm install
+RUN echo "${USER_NAME}:x:${USER_ID}:${GROUP_ID}:Hypertext Application User:/opt/app-root/:/bin/bash" >> /etc/passwd &\
+    chown -R 1001:0 "/opt/app-root"
 
-Expose 8080
+USER 1001
+
+RUN npm install 
+
+EXPOSE 8080
 
 CMD ["npm", "start"]

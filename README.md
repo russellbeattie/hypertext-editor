@@ -44,7 +44,6 @@ Also thanks to the Google dev relations guys for the file stuff here:
 
 ## How to run this app using Docker
 
-**Clone the repository**
 
 ```
 git clone https://github.com/russellbeattie/hypertext-editor.git
@@ -53,6 +52,6 @@ cd hypertext-editor
 
 docker build -t <image_name> .
 
-docker run -d -it --name <container_name> <image_name>
+docker run -d -it --name <container_name> -p <forward_portnumber>:<application_port_number> <image_name>
 
 ```
