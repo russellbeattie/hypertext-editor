@@ -15,6 +15,10 @@ body {
   box-shadow: 0 1px 3px 1px rgba(60,64,67,.15);
 }
 
+img, iframe, video {
+  max-width: -webkit-fill-available;
+}
+
 .mce-object {
   margin: auto;
   display: block;

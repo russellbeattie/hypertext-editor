@@ -28,29 +28,29 @@ function copyStatic() {
       .pipe(copy(DEST_DIR, {prefix: 1}));
 }
 
-function copyLibs() {
-  let base = './node_modules';
-  const filesToCopy = [
-    `${base}/tinymce/plugins/anchor/plugin.js`,
-    `${base}/tinymce/plugins/autolink/plugin.js`,
-    `${base}/tinymce/plugins/autosave/plugin.js`,
-    `${base}/tinymce/plugins/codesample/plugin.js`,
-    `${base}/tinymce/plugins/help/plugin.js`,
-    `${base}/tinymce/plugins/insertdatetime/plugin.js`,
-    `${base}/tinymce/plugins/link/plugin.js`,
-    `${base}/tinymce/plugins/lists/plugin.js`,
-    `${base}/tinymce/plugins/searchreplace/plugin.js`,
-    `${base}/tinymce/plugins/table/plugin.js`,
-    `${base}/tinymce/plugins/visualblocks/plugin.js`,
-    `${base}/tinymce/plugins/visualchars/plugin.js`,
-    `${base}/tinymce/plugins/wordcount/plugin.js`,
-    `${base}/tinymce/models/dom/model.js`,
-    `${base}/tinymce/icons/default/icons.js`,
-    `${base}/tinymce/tinymce.js`
-  ];
-  return gulp.src(filesToCopy)
-      .pipe(copy(`${DEST_DIR}/libs`, {prefix: 1}));
-}
+// function copyLibs() {
+//   let base = './node_modules';
+//   const filesToCopy = [
+//     `${base}/tinymce/plugins/anchor/plugin.js`,
+//     `${base}/tinymce/plugins/autolink/plugin.js`,
+//     `${base}/tinymce/plugins/autosave/plugin.js`,
+//     `${base}/tinymce/plugins/codesample/plugin.js`,
+//     `${base}/tinymce/plugins/help/plugin.js`,
+//     `${base}/tinymce/plugins/insertdatetime/plugin.js`,
+//     `${base}/tinymce/plugins/link/plugin.js`,
+//     `${base}/tinymce/plugins/lists/plugin.js`,
+//     `${base}/tinymce/plugins/searchreplace/plugin.js`,
+//     `${base}/tinymce/plugins/table/plugin.js`,
+//     `${base}/tinymce/plugins/visualblocks/plugin.js`,
+//     `${base}/tinymce/plugins/visualchars/plugin.js`,
+//     `${base}/tinymce/plugins/wordcount/plugin.js`,
+//     `${base}/tinymce/models/dom/model.js`,
+//     `${base}/tinymce/icons/default/icons.js`,
+//     `${base}/tinymce/tinymce.js`
+//   ];
+//   return gulp.src(filesToCopy)
+//       .pipe(copy(`${DEST_DIR}/libs`, {prefix: 1}));
+// }
 
 
 function createManifest(cb) {
@@ -93,14 +93,14 @@ exports.serve = serveDev;
 
 exports.build = gulp.series(
   clean,
-  copyLibs,
+  // copyLibs,
   copyStatic,
   createManifest
 );
 
 exports.buildProd = gulp.series(
   clean,
-  copyLibs,
+  // copyLibs,
   copyStatic,
   createManifest
 );

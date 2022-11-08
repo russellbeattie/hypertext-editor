@@ -11,12 +11,9 @@ async function getHTMLTemplate() {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title></title>
-<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAA10lEQVRIie3VP2pCQRDH8U+CSfQyHiCSJoVExcNYpQu2VjlIihRpUmiVfwjeR0PAWLg2q29976HwBL+wLMzMzm9md9nl1LnIsHfQ3LN2hkkZ0Tb+c4xf9MsIPIUE9UTMMMQs0E0lu0zYFjmKucErekUEinKNF9wfSwAaeMNt7KiVTPiJUWR7tL4g34cQGIcRC2xxqC3K5OgCebboGXcZvg8MUosr0UGywn1UooPzGWyxDHPquY7ZxC5jx64OfsI8LyCwYRobsr7MB7RwlTPxH77wXqKoirMCzd8mEpBQY98AAAAASUVORK5CYII=">
+<link rel="icon" href="data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='4' y='24' font-size='34' fill='%23020887'%3Eh%3C/text%3E%3C/svg%3E">
 </head>
 <body>
-<main>
-<p></p>
-</main>
 </body>
 </html>`;
 
@@ -195,6 +192,8 @@ function getDocumentHTMLToSave() {
 
   let htmlText = '<!DOCTYPE html>\n' + currentDocument.documentElement.outerHTML;
 
+  htmlText = beautify(htmlText);
+
   return htmlText;
 }
 
@@ -311,13 +310,12 @@ function getSuggestedFileName(){
 
   let title = getTitle();
   if(title !== ''){
-    filename = title.trim().replace(/[^a-z0-9]/gi, '-').toLowerCase() + '.html';
+    filename = title.trim().replaceAll(' ','-').replace(/[^a-z0-9-]/gi, '').replace(/-+/gi,'-').toLowerCase();
   } else {
-    let dateText = getDateTimeText();
-    filename = dateText + '.html';
+    filename = getDateTimeText();
   }
 
-  return filename;
+  return filename + '.html';
 
 
 }

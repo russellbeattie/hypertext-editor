@@ -11,7 +11,7 @@
 
 let editorInitSettings = {
   selector: '#textEditor',
-  document_base_url: localServer,
+  // document_base_url: localServer,
   content_css: content_css,
   skin_url: skin_url,
   theme_url: theme_url,
@@ -24,20 +24,20 @@ let editorInitSettings = {
 
   plugins: ['anchor', 'autolink', 'autosave', 'codesample', 'help', 'insertdatetime', 'link', 'lists', 'searchreplace', 'table', 'visualblocks', 'visualchars', 'wordcount'],
 
-  contextmenu: 'undo redo | link anchor | forecolor backcolor | image | table | attributes | edit-tag',
+  contextmenu: 'spelling | link | forecolor backcolor | image | table | attributes edit-block | edit-tag',
 
   toolbar: false,
 
   menubar: 'file edit view insert format blocks tools help',
 
   menu: {
-    file: { title: 'File', items: 'menunew menuopen | menusave menusaveas | cssfile-menu | edit-doc-props | restoredraft | preview print ' },
+    file: { title: 'File', items: 'menunew menuopen | newwindow setfolder | menusave menusaveas | cssfile-menu | edit-doc-props | restoredraft | preview print ' },
     edit: { title: 'Edit', items: 'undo redo | cut copy paste selectall | pastetext | searchreplace' },
-    view: { title: 'View', items: 'visualaid-option visualchars visualblocks | toggle-textmenu toggle-darkmode | wordcount' },
-    insert: { title: 'Insert', items: 'link image embed codesample hr add-toc | inserttable | anchor | unordered ordered | insertdatetime' },
+    view: { title: 'View', items: 'visualchars visualblocks | toggle-textmenu toggle-darkmode | wordcount' },
+    insert: { title: 'Insert', items: 'link image embed codesample add-toc hr anchor | inserttable | insertdatetime' },
     format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat forecolor backcolor | removeformat ' },
-    blocks: { title: 'Paragraphs', items: 'styles | indentation align' },
-    tools: { title: 'Tools', items: 'edit-prefs | edit-head edit-body edit-css edit-block edit-tag | run-macro ' },
+    blocks: { title: 'Paragraphs', items: 'styles | indentation align | unordered ordered' },
+    tools: { title: 'Tools', items: 'edit-prefs | edit-head edit-body edit-css | edit-tag | run-macro ' },
     help: { title: 'Help', items: 'help' },
   },
 
@@ -59,18 +59,13 @@ let editorInitSettings = {
   block_formats: 'Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4; Blockquote=blockquote; Pre=pre',
 
   valid_elements: '*[*]',
-  extended_valid_elements : "a[class|name|href|target|title|rel],script[*],iframe[*],img[class|src|alt|title|width|height|align|name],object[*],embed[*]",
-
-
-  // protect: [/<script>[\s\S]*?<\/script>/g],
-
+  extended_valid_elements : 'a[*],script[*],iframe[*],img[*],object[*],embed[*]',
 
   formats: {
     bold: { inline: 'strong' },
     italic: { inline: 'em' },
     underline: { inline: 'u' },
-    strikethrough: { inline: 's' },
-    main: { block: 'main', wrapper: true, merge_siblings: true, deep: true, remove: 'none' },
+    strikethrough: { inline: 's' }
   },
 
   mobile: {
@@ -92,7 +87,7 @@ let editorInitSettings = {
   convert_urls: false,
   elementpath: true,
   end_container_on_empty_block: true,
-  entity_encoding: 'raw',
+  entity_encoding: 'named',
   file_picker_types: 'image media',
   font_family_formats: '',
   font_size_formats: '',
@@ -122,14 +117,16 @@ let editorInitSettings = {
   media_dimensions: false,
   media_live_embeds: true,
   noneditable_class: 'tag',
+  object_resizing: 'table',
   paste_block_drop: false,
-  paste_data_images: true,
+  paste_data_images: false,
   paste_preprocess: pastePreprocess,
   paste_remove_styles_if_webkit: true,
   paste_merge_formats: false,
   promotion: false,
   quickbars_insert_toolbar: false,
   relative_urls: true,
+  remove_trailing_brs: false,
   resize: false,
   resize_img_proportional: true,
   schema: 'html5-strict',

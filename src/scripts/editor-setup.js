@@ -24,6 +24,8 @@ function editorSetup(editor) {
   editor.ui.registry.addIcon('export-icon', '<svg width="24" height="24"><path d="m16.95 5.97-1.41 1.41L13 4.85v12.2h-2V4.84L8.46 7.38 7.05 5.97 12 1.02l4.95 4.95Z"/><path d="M5 20.98v-10h4v-2H3v14h18v-14h-6v2h4v10H5Z"/></svg>');
   editor.ui.registry.addIcon('folder-icon', '<svg width="24" height="24"><path fill-rule="evenodd" clip-rule="evenodd" d="M4 1.5a2 2 0 0 0-2 2v1.17A3 3 0 0 0 0 7.5v12a3 3 0 0 0 3 3h18a3 3 0 0 0 3-3v-12a3 3 0 0 0-3-3h-9.13A4 4 0 0 0 8 1.5H4Zm5.73 3A2 2 0 0 0 8 3.5H4v1h5.73ZM3 6.5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-12a1 1 0 0 0-1-1H3Z"/></svg>');
   editor.ui.registry.addIcon('coffee-icon', '<svg width="24" height="24"><path d="M6 2.5a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0v-2a1 1 0 0 0-1-1Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M13 21.5a6 6 0 0 0 5.92-5H19a4 4 0 0 0 0-8v-1H1v8a6 6 0 0 0 6 6h6ZM3 9.5v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4v-6H3Zm18 3a2 2 0 0 1-2 2v-4a2 2 0 0 1 2 2Z"/><path d="M9 3.5a1 1 0 1 1 2 0v2a1 1 0 1 1-2 0v-2ZM14 2.5a1 1 0 0 0-1 1v2a1 1 0 1 0 2 0v-2a1 1 0 0 0-1-1Z"/></svg>');
+  editor.ui.registry.addIcon('attributes-icon', '<svg width="24" height="24"><path d="M8 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM14 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM18 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg>');
+  editor.ui.registry.addIcon('window-icon', '<svg width="24" height="24"><path d="M4 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM8 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM10 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M3 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h18a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3H3Zm18 2H3a1 1 0 0 0-1 1v3h20V6a1 1 0 0 0-1-1ZM2 18v-7h20v7a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1Z"/></svg>');
   editor.ui.registry.addIcon('File', '<svg width="24" height="24"><path d="M10 12a1 1 0 1 0 0 2h4a1 1 0 0 0 0-2h-4Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M4 2a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h16a3 3 0 0 0 3-3V5a3 3 0 0 0-3-3H4Zm16 2H4a1 1 0 0 0-1 1v3h18V5a1 1 0 0 0-1-1ZM3 19v-9h18v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Z"/></svg>');
   editor.ui.registry.addIcon('Edit', '<svg width="24" height="24"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.26 2.3a1 1 0 0 0-1.41 0l-.87.87a3 3 0 0 0-3.42.58l-10.6 10.6 5.65 5.67L21.21 9.4a3 3 0 0 0 .6-3.42l.87-.87a1 1 0 0 0 0-1.41l-1.42-1.42ZM17 10.8 10.6 17.2l-2.83-2.83 6.39-6.38L17 10.8ZM18.8 9l1-1a1 1 0 0 0 0-1.41l-1.42-1.41a1 1 0 0 0-1.41 0l-1 .99 2.83 2.83Z"/><path d="m2 22.95 2.12-7.78 5.66 5.66L2 22.95Z"/></svg>');
   editor.ui.registry.addIcon('View', '<svg width="24" height="24"><path d="M3 3h6v2H5v4H3V3ZM3 21h6v-2H5v-4H3v6ZM15 21h6v-6h-2v4h-4v2ZM21 3h-6v2h4v4h2V3Z"/></svg>');
@@ -33,6 +35,52 @@ function editorSetup(editor) {
   editor.ui.registry.addIcon('Table', '<svg width="24" height="24"><path d="M4 4h4v4H4V4ZM4 10h4v4H4v-4ZM8 16H4v4h4v-4ZM10 4h4v4h-4V4ZM14 10h-4v4h4v-4ZM10 16h4v4h-4v-4ZM20 4h-4v4h4V4ZM16 10h4v4h-4v-4ZM20 16h-4v4h4v-4Z"/></svg>');
   editor.ui.registry.addIcon('Help', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path fill-rule="evenodd" d="M12 0a12 12 0 1 1 0 24 12 12 0 0 1 0-24Zm0 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 9a2 2 0 0 1 2 2v5a2 2 0 1 1-4 0v-5c0-1.1.9-2 2-2Zm0-6a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z"/></svg>');
   editor.ui.registry.addIcon('Paragraphs', '<svg width="24" height="24"><path d="M8.02 6.98a1 1 0 0 0 0 2h7.95a1 1 0 0 0 0-2H8.02ZM7.02 12a1 1 0 0 1 1-1h7.95a1 1 0 0 1 0 2H8.02a1 1 0 0 1-1-1ZM8.02 15.01a1 1 0 0 0 0 2h7.96a1 1 0 0 0 0-2H8.02Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6Zm3-1h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/></svg>');
+
+
+
+  /* *********************** */
+
+  if('showOpenFilePicker' in window){
+
+    editor.ui.registry.addButton('setfolder', {
+      icon: 'folder-icon',
+      onAction: async function () {
+        await setWorkingFolder();
+        editor.execCommand('mceCleanup');
+      },
+    });
+
+    editor.ui.registry.addMenuItem('setfolder', {
+      icon: 'folder-icon',
+      text: 'Set Working Folder',
+      onAction: async function () {
+        await setWorkingFolder();
+        editor.execCommand('mceCleanup');
+      },
+    });
+  }
+
+  /* *********************** */
+
+  if (window.matchMedia('(display-mode: browser)').matches == false) {
+
+    editor.ui.registry.addButton('newwindow', {
+      icon: 'window-icon',
+      onAction: async function () {
+        window.open('/editor', 'newwindow' + Math.random(), 'height=' + window.innerHeight + ',width=' + window.outerWidth);
+      },
+    });
+
+
+    editor.ui.registry.addMenuItem('newwindow', {
+      icon: 'window-icon',
+      text: 'New window',
+      onAction: async function () {
+        window.open('/editor', 'newwindow' + Math.random(), 'height=' + window.innerHeight + ',width=' + window.outerWidth);
+      },
+    });
+
+  }
 
   /* *********************** */
 
@@ -79,8 +127,35 @@ function editorSetup(editor) {
 
   /* *********************** */
 
+  editor.ui.registry.addMenuItem('spelling', {
+    icon: 'spell-check',
+    text: 'Spelling',
+    onAction: function () {
+      showSpelling();
+    },
+  });
+
+  editor.ui.registry.addButton('spelling', {
+    icon: 'spell-check',
+    onAction: function () {
+      showSpelling();
+    },
+  });
+
+  editor.ui.registry.addContextMenu('spelling', {
+    update: function(element) {
+      let range = editor.selection.getRng();
+      if (range.startContainer.nodeType === Node.TEXT_NODE) {
+        return 'spelling';
+      }
+      return '';
+    }
+  });
+
+  /* *********************** */
+
   editor.ui.registry.addMenuItem('attributes', {
-    icon: 'sourcecode',
+    icon: 'attributes-icon',
     text: 'Attributes',
     onAction: function () {
       showAttributesMenu();
@@ -88,7 +163,7 @@ function editorSetup(editor) {
   });
 
   editor.ui.registry.addButton('attributes', {
-    icon: 'sourcecode',
+    icon: 'attributes-icon',
     onAction: function () {
       showAttributesMenu();
     },
@@ -102,7 +177,7 @@ function editorSetup(editor) {
 
   editor.ui.registry.addMenuItem('edit-block', {
     icon: 'sourcecode',
-    text: 'Edit Block...',
+    text: 'Edit Block',
     onAction: function () {
       editBlock();
     },
@@ -651,6 +726,12 @@ function editorSetup(editor) {
 
     /* *********************** */
 
+    editor.on('dragover', dragOverHandler);
+    editor.on('drop', dragDropHandler);
+
+
+    /* *********************** */
+
     toggleDarkMode(darkModeToggle);
 
     /* *********************** */
@@ -686,34 +767,7 @@ function editorSetup(editor) {
       }
     });
 
-    if(navigator.onLine == false){
-      (async function() {
-        // stupid iframe pwa bug
-
-        let cssText = '';
-        let response;
-
-        response = await fetch(skinName + '/content.min.css');
-        if (response.ok) {
-          let skinCSSText = await response.text();
-          cssText += skinCSSText;
-        }
-        response = await fetch(contentCSSUrl);
-        if (response.ok) {
-          let contentCSSText = await response.text();
-          cssText += contentCSSText;
-        }
-        let styleEl = document.createElement('style');
-        styleEl.textContent = cssText;
-        tinymce.activeEditor.getDoc().head.append(styleEl);
-
-      })();
-    }
-
-
     /* *********************** */
-
-
 
   });
 }

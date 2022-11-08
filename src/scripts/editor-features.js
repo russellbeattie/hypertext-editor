@@ -1,5 +1,89 @@
 
-function editImage() {
+/* *********************** */
+
+let dict = new Typo('en_US', null, null, { dictionaryPath : './libs/typo/dictionaries'});
+
+function showSpelling(){
+
+  let search = '';
+
+  if(tinymce.activeEditor.selection.isCollapsed()){
+    let range = tinymce.activeEditor.selection.getRng();
+    if (range.startContainer.nodeType === Node.TEXT_NODE) {
+      range.expand('word');
+      search = range.toString().trim();
+    }
+  } else {
+    search = tinymce.activeEditor.selection.getContent();
+    if(search.length > 30){
+      search = '';
+    }
+  }
+
+  if(search == ''){
+    return;
+  }
+
+  let suggestions = dict.suggest(search);
+
+  // if(suggestions.length == 0){
+  //   if(synonyms[search]){
+  //     suggestions = synonyms[search];
+  //   };
+  // }
+
+
+  if(suggestions.length == 0){
+    tinymce.activeEditor.notificationManager.open({
+      text: 'No suggestions found.',
+      type: 'info',
+      timeout: 1000
+    });
+    return;
+  }
+
+  let items = [];
+  suggestions.forEach(function(suggestion){
+    items.push({
+      value: suggestion,
+      text: suggestion
+    });
+  });
+
+  word = suggestions[0];
+
+
+  tinymce.activeEditor.windowManager.open({
+    title: 'Spelling Suggestions',
+    size: 'normal',
+    body: {
+      type: 'panel',
+      items: [{ type: 'selectbox', label: '"' + search + '"', name: 'word', size: 5, items: items }],
+    },
+    initialData: {
+      word: word,
+    },
+    buttons: [
+      { type: 'cancel', name: 'cancel', text: 'Cancel' },
+      { type: 'submit', name: 'save', text: 'Save', primary: true },
+    ],
+    onSubmit: function (api) {
+      let word = api.getData().word;
+      
+      tinymce.activeEditor.selection.setContent(word);
+
+      api.close();
+    },
+  });
+
+
+}
+
+
+
+/* *********************** */
+
+async function editImage() {
   let initData =  {
     src: {
       value: '',
@@ -18,17 +102,24 @@ function editImage() {
     selectedEl = selectedEl.querySelector('img');
   }
 
+  dirHandle = await get('dirHandle');
+
+  let filetype = null;
+  if(dirHandle){
+    filetype = 'image';
+  }
+
   if(selectedEl.nodeName.toLowerCase() == 'img'){
     update = true;
     initData.src.value = selectedEl.getAttribute('src') || '';
     initData.alt = selectedEl.getAttribute('alt') || '';
     items = [
-        { type: 'urlinput', label: 'Path, URL or Embed Image', name: 'src', filetype: 'image' },
+        { type: 'urlinput', label: 'Path, URL or Embed Image', name: 'src', filetype: filetype },
         { type: 'input', label: 'Alt Text', name: 'alt' }
       ];
   } else {
     items = [
-        { type: 'urlinput', label: 'Path, URL or Embed Image', name: 'src', filetype: 'image' },
+        { type: 'urlinput', label: 'Path, URL or Embed Image', name: 'src', filetype: filetype },
         { type: 'input', label: 'Alt Text', name: 'alt' },
         { type: 'input', label: 'Caption', name: 'captionText' },
         { type: 'checkbox', label: 'Figure with Caption', name: 'caption' },
@@ -61,22 +152,24 @@ function editImage() {
       if(update){
 
         selectedEl.setAttribute('src', src);
+        // selectedEl.setAttribute('data-mce-src', src);
         selectedEl.setAttribute('alt', alt);
       
       } else {
 
-        let imgEl = document.createElement('img');
+        let doc = tinymce.activeEditor.getDoc();
+
+        let imgEl = doc.createElement('img');
         imgEl.setAttribute('src', src);
         if(data.alt){
           imgEl.setAttribute('alt', alt);
         }
 
         if (data.caption) {
-          let figureEl = document.createElement('figure');
+          let figureEl = doc.createElement('figure');
           figureEl.classList.add('image');
-          figureEl.setAttribute('contenteditable', 'false');
 
-          let figCaptionEl = document.createElement('figcaption');
+          let figCaptionEl = doc.createElement('figcaption');
           figCaptionEl.textContent = data.captionText || 'Caption';
 
           figureEl.append(imgEl);
@@ -183,32 +276,63 @@ function showEditBlockMenu() {
 
 function showAttributesMenu() {
   const editor = tinymce.activeEditor;
+
+  let items = [
+        { type: 'input', name: 'name', label: 'Tag Name', enabled: false },
+      ];
+
+  if(editor.selection.getNode().hasAttribute('href')){
+    items.push({ type: 'input', name: 'href', label: 'href' });
+  }
+
+  if(editor.selection.getNode().hasAttribute('src')){
+    items.push({ type: 'input', name: 'src', label: 'src' });
+  }
+
+  if(editor.selection.getNode().hasAttribute('alt')){
+    items.push({ type: 'input', name: 'alt', label: 'alt' });
+  }
+
+  items.push({ type: 'input', name: 'classesText', label: 'class' });
+  items.push({ type: 'input', name: 'styleText', label: 'style' });
+  items.push({ type: 'input', name: 'id', label: 'id' });
+
+  let initData = {
+      name: ' <' + editor.selection.getNode().nodeName.toLowerCase() + '>',
+      id: editor.selection.getNode().id,
+      classesText: editor.selection.getNode().getAttribute('class') || '',
+      styleText: editor.selection.getNode().getAttribute('style') || '',
+      href: editor.selection.getNode().getAttribute('href') || '',
+      src: editor.selection.getNode().getAttribute('src') || '',
+      alt: editor.selection.getNode().getAttribute('alt') || '',
+    };
+
+
   editor.windowManager.open({
     title: 'Edit Attributes',
     body: {
       type: 'panel',
-      items: [
-        { type: 'input', name: 'name', label: 'Tag Name', enabled: false },
-        { type: 'input', name: 'classesText', label: 'Classes' },
-        { type: 'input', name: 'styleText', label: 'Style' },
-        { type: 'input', name: 'id', label: 'ID' },
-      ],
+      items: items,
     },
     buttons: [
       { type: 'cancel', name: 'cancel', text: 'Cancel' },
       { type: 'submit', name: 'save', text: 'Save', primary: true },
     ],
-    initialData: {
-      name: ' <' + editor.selection.getNode().nodeName.toLowerCase() + '>',
-      id: editor.selection.getNode().id,
-      classesText: editor.selection.getNode().getAttribute('class') || '',
-      styleText: editor.selection.getNode().getAttribute('style') || '',
-    },
+    initialData: initData,
     onSubmit: function (api) {
       let node = editor.selection.getNode();
       node.id = api.getData().id.trim();
       node.setAttribute('class', api.getData().classesText.trim());
       node.setAttribute('style', api.getData().styleText.trim());
+      if(node.hasAttribute('href')){
+        node.setAttribute('href', api.getData().href.trim());
+      }
+      if(node.hasAttribute('src')){
+        node.setAttribute('src', api.getData().src.trim());
+      }
+      if(node.hasAttribute('alt')){
+        node.setAttribute('alt', api.getData().src.trim());
+      }
       api.close();
     },
   });
@@ -338,7 +462,7 @@ function editCode(title, codeText, callback) {
                     bothTags: true,
                     dragDrop: false,
                     extraKeys: { 'Ctrl-Space': 'autocomplete', 'Ctrl-J': 'toMatchingTag' },
-                    indentUnit: 2,
+                    indentUnit: 1,
                     indentWithTabs: false,
                     lineNumbers: true,
                     lineWrapping: true,
@@ -346,7 +470,7 @@ function editCode(title, codeText, callback) {
                     mode: mode,
                     saveCursorPosition: true,
                     styleActiveLine: true,
-                    tabSize: 2,
+                    tabSize: 1,
                     viewportMargin: Infinity,
                     value: s,
                   });
@@ -483,6 +607,8 @@ function editBody() {
 
   let htmlText = currentDocument.body.innerHTML;
 
+  htmlText = beautify(htmlText);
+
   htmlText = html_beautify(htmlText);
 
   editCode('Edit Body', htmlText, function (returnText) {
@@ -558,7 +684,97 @@ function editDocProps() {
 
 /* *********************** */
 
-function editPrefs() {
+async function editPrefs() {
+
+  let editor = tinymce.activeEditor;
+
+  let localServerEnabled = true;
+
+  let initialData = {
+    author: localStorage.getItem('author') || '',
+    localServer: localStorage.getItem('localServer') || '',
+    workingFolder: await getWorkingFolder()
+  }
+
+  if(initialData.workingFolder !== ''){
+    localServerEnabled = false;
+  }
+
+  editor.windowManager.open({
+    title: 'Edit App Preferences',
+    body: {
+      type: 'panel',
+      items: [
+        { type: 'input', label: 'Author', name: 'author' },
+        { type: 'input', label: 'Working Folder', name: 'workingFolder', enabled: false}, 
+        { type: 'bar', items: [
+          { type: 'button', text: 'Set Working Folder', name: 'set'},
+        ]},
+        { type: 'input', label: 'Server', 'placeholder': 'http://localhost:3000/', name: 'localServer', enabled: localServerEnabled},
+        { type: 'label', label: 'Set Server OR Working Folder for page images/media.', items: []}
+
+      ],
+    },
+    buttons: [
+      { type: 'cancel', name: 'cancel', text: 'Cancel' },
+      { type: 'submit', name: 'save', text: 'Save', primary: true },
+    ],
+    initialData: initialData,
+    onAction: async function(api, details){
+      let data = api.getData();
+      if(details.name == 'set'){
+        await setWorkingFolder();
+        let wf = getWorkingFolder();
+        if(wf !== ''){
+          api.setEnabled('localServer', false);
+          localStorage.setItem('localServer', '');
+          data.localServer = '';
+        }
+      }
+      if(details.name == 'delete'){
+        deleteWorkingFolder();
+        api.setEnabled('localServer', true);
+      }
+      data.workingFolder = await getWorkingFolder();
+      api.setData(data);
+    },
+    onSubmit: function (api) {
+      let data = api.getData();
+      
+      let localServer = data.localServer || '';
+
+      if( localServer !== '' && localServer.endsWith('/') == false){
+        localServer = localServer + '/';
+      }
+
+      let currentLocalServer = localStorage.getItem('localServer') || '';
+
+
+      localStorage.setItem('author', data.author) || '';
+      if(localServer == ''){
+        localStorage.removeItem('localServer');
+      } else {
+        localStorage.setItem('localServer', localServer);
+      }
+      let baseEl = editor.getDoc().querySelector('head base');
+      if(baseEl){
+        if(localServer == ''){
+          baseEl.remove();
+        } else {
+          baseEl.href = localServer;
+        }
+      }
+
+      if(localServer !== currentLocalServer){
+        editor.execCommand('mceCleanup');
+      }
+      api.close();
+    },
+  });
+}
+
+
+function editPrefs_old() {
 
   let editor = tinymce.activeEditor;
 
@@ -769,27 +985,13 @@ function cleanNode(node) {
 /* *********************** */
 
 function filePicker(callback, value, meta) {
-  const input = document.createElement('input');
-  input.setAttribute('type', 'file');
-  input.setAttribute('accept', 'image/*');
 
-  input.addEventListener('change', function (e) {
-    const file = e.target.files[0];
+  getImage().then(function(filename){
+    callback(filename);
 
-    const reader = new FileReader();
-    reader.addEventListener('load', () => {
-      const id = 'blobid' + new Date().getTime();
-      const blobCache = tinymce.activeEditor.editorUpload.blobCache;
-      const base64 = reader.result.split(',')[1];
-      const blobInfo = blobCache.create(id, file, base64);
-      blobCache.add(blobInfo);
-
-      callback(blobInfo.blobUri(), {filename: file.name});
-    });
-    reader.readAsDataURL(file);
   });
 
-  input.click();
+
 }
 
 /* *********************** */
@@ -850,3 +1052,91 @@ function toggleTextMenu(flag){
   }
 
 }
+
+/* *********************** */
+
+function beautify(htmlText){
+
+  let html = htmlText;
+
+  html = html_beautify(htmlText, {
+      'indent_inner_html': false,
+      'indent_size': 1,
+      'indent_char': ' ',
+      'inline': '',
+      'wrap_line_length': 0,
+      'brace_style': 'collapse',
+      'preserve_newlines': false,
+      'end_with_newline': false,
+      'content_unformatted': ['pre', 'textarea','td', 'span'],
+      'extra_liners': ['body','h2','h3','h4','blockquote']
+    });
+
+  html = html.replaceAll('<p>','\r<p>\r');
+  html = html.replaceAll('</p>','\r</p>\r');
+
+
+  return html;
+
+}
+
+// document.addEventListener("dragover", function( event ) {
+//       // prevent default to allow drop
+//       event.preventDefault();
+//   }, false);
+
+/* *********************** */
+
+function dragOverHandler(event){
+  event.preventDefault();
+}
+
+async function dragDropHandler(event){
+
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'copy';
+
+  let filepath = '';
+  let file;
+
+  for(let item of event.dataTransfer.items) {
+    
+    if(item.kind === 'file') {
+      
+      let entry = await item.getAsFileSystemHandle();
+      
+      if (entry.kind === 'file') {
+
+        filepath = entry.name;
+
+        let dirHandle = await get('dirHandle');
+        if(dirHandle){  
+          let relativePaths = await dirHandle.resolve(entry);
+          if (relativePaths !== null) {
+            filepath = relativePaths.join('/');
+          }
+        }
+          
+        let type = 'img';
+        if(filepath.endsWith('.mp4')){
+          type = 'video';
+        }
+        if(filepath.endsWith('.mp3')){
+          type = 'audio';
+        }
+
+        let doc = tinymce.activeEditor.getDoc();
+        let mediaEl = doc.createElement(type);
+        mediaEl.setAttribute('src', filepath);
+        
+        if(type !== 'img'){
+          mediaEl.setAttribute('controls', 'true');
+        }
+      
+        tinymce.activeEditor.insertContent(mediaEl.outerHTML);
+
+      }
+    }
+  }
+}
+

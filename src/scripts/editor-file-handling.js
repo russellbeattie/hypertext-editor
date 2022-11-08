@@ -6,7 +6,6 @@ var dirHandle = null;
 
 var fileSystemSupport = 'showOpenFilePicker' in window;
 
-
 /* *********************** */
 
 function getFileSystemSupport(){
@@ -15,16 +14,16 @@ function getFileSystemSupport(){
 
 /* *********************** */
 
-function deleteWorkingFolder(){
-
+async function deleteWorkingFolder(){
   dirHandle = null;
-
+  await del('dirHandle');
 }
-
 
 /* *********************** */
 
-function getWorkingFolder(){
+async function getWorkingFolder(){
+
+  dirHandle = await get('dirHandle');
 
   if(dirHandle){
     return dirHandle.name;
@@ -36,17 +35,144 @@ function getWorkingFolder(){
 
 /* *********************** */
 
+async function verifyWorkingFolder(){
+
+  dirHandle = await get('dirHandle');
+
+  if(dirHandle){
+
+    if ((await verifyPermission(dirHandle, true)) === false) {
+      console.error(`User did not grant permission to '${dirHandle.name}'`);
+      await del('dirHandle');
+    }
+  
+  }
+
+}
+
+
+
+/* *********************** */
+
 async function setWorkingFolder(){
 
   try {
     dirHandle = await window.showDirectoryPicker({mode: 'readwrite'});
 
-    postMessage({'dirHandle': dirHandle});
+    await set('dirHandle', dirHandle);
+
   } catch(err){
-    console.log('Directory problem');
+    console.log(err);
   }
 }
 
+/* *********************** */
+
+async function getFileList(dir, handles){
+
+  if(!handles){
+    handles = {};
+  }
+
+  for await (const entry of dir.values()) {
+
+    if(entry.name.startsWith('.') == true){
+      continue;
+    }
+
+    if (entry.kind !== 'file') {
+        handles = await getFileList(entry, handles);
+        continue;
+    }
+
+    let filepath = entry.name;
+    let relativePaths = await dirHandle.resolve(entry);
+    if (relativePaths !== null) {
+      filepath = relativePaths.join('/');
+    }
+
+    handles[filepath] = entry;
+
+  }
+
+  return handles;
+
+}
+
+/* *********************** */
+
+async function getLocalFile(filename){
+
+  dirHandle = await get('dirHandle');
+
+  if(dirHandle){
+    let fileHandles = await getFileList(dirHandle);
+    
+    let filepath = null;
+    
+    let paths = Object.keys(fileHandles);
+    
+    for(let i = 0; i < paths.length; i++){
+      let path = paths[i];
+      if(path.includes(filename)){
+        filepath = path;
+        break;
+      }
+    }
+     
+     if(filepath){
+          
+        let fileHandle = fileHandles[filepath];
+        let file = await fileHandle.getFile();
+
+        return {
+          filepath: filepath,
+          file: file
+        };
+    } 
+  }
+
+  return null;
+
+}
+
+/* *********************** */
+
+async function getImage(){
+
+  dirHandle = await get('dirHandle');
+
+  try {
+      const opts = {
+        startIn: dirHandle,
+        types: [
+          {
+            description: 'Images',
+            accept: {
+              'image/*': ['.png', '.gif', '.jpeg', '.jpg']
+            }
+          },
+        ],
+        excludeAcceptAllOption: true,
+      };
+
+    let fileHandle; 
+
+    [fileHandle] = await window.showOpenFilePicker(opts);
+    
+    
+    let filename = fileHandle.name;
+    let relativePaths = await dirHandle.resolve(fileHandle);
+    if (relativePaths !== null) {
+      filename = relativePaths.join('/');
+    }
+
+    return filename;
+
+  } catch(err){
+    console.err(err);
+  }
+}
 
 /* *********************** */
 
@@ -72,7 +198,19 @@ async function openHTMLFile(fileHandle) {
     }
   } else {
     try {
-      [fileHandle] = await window.showOpenFilePicker();
+
+      const opts = {
+        types: [
+          {
+            description: 'HTML file',
+            accept: { 'text/html': ['.html', '.htm', '.htmd'] },
+          },
+        ],
+        excludeAcceptAllOption: true,
+      };
+
+
+      [fileHandle] = await window.showOpenFilePicker(opts);
     } catch (ex) {
       if (ex.name === 'AbortError') {
         return;
@@ -353,7 +491,19 @@ async function importCSSFile(){
   let fileHandle;
 
   try {
-      [fileHandle] = await window.showOpenFilePicker();
+      
+      const opts = {
+        types: [
+          {
+            description: 'CSS file',
+            accept: { 'text/css': ['.css'] },
+          },
+        ],
+        excludeAcceptAllOption: true,
+      };
+
+
+      [fileHandle] = await window.showOpenFilePicker(opts);
     } catch (ex) {
       if (ex.name === 'AbortError') {
         return;
@@ -589,10 +739,20 @@ async function getScript(){
     return scriptText;
   }
 
+  const opts = {
+    types: [
+      {
+        description: 'JavaScript file',
+        accept: { 'text/javascript': ['.js'] },
+      },
+    ],
+    excludeAcceptAllOption: true,
+  };
+
   let fileHandle;
 
   try {
-      [fileHandle] = await window.showOpenFilePicker();
+      [fileHandle] = await window.showOpenFilePicker(opts);
     } catch (ex) {
       if (ex.name === 'AbortError') {
         return;
