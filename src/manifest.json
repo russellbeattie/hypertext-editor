@@ -7,7 +7,7 @@
   "start_url": "./",
   "display": "fullscreen",
   "theme_color": "#020887",
-  "background_color": "#fff",
+  "background_color": "#FDFDFD",
   "icons": [
     {
       "src": "./assets/hypertext-app-icon192.png",
@@ -55,7 +55,10 @@
       "url": "./index.html?file=%s"
     }
   ],
-   "display_override": ["fullscreen", "standalone", "minimal-ui"],
+  "url_handlers": [
+      {"origin": "https://www.hypertext.plus"}
+  ],
+   "display_override": ["window-controls-overlay", "fullscreen", "standalone", "minimal-ui"],
    "dir": "auto",
   "lang": "en",
   "orientation": "any",

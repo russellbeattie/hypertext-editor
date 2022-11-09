@@ -200,8 +200,9 @@ iframe {
   margin: auto;
 }
 
-img {
+img, iframe, video {
   max-width: 100%;
+  max-width: -webkit-fill-available;
 }
 
 figure {

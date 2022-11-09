@@ -17008,7 +17008,8 @@
         return {
           customFormats: acc.customFormats.concat([{
               name: formatNameWithPrefix,
-              format: fmt
+              format: fmt,
+              icon: fmt.icon
             }]),
           formats: acc.formats.concat([{
               title: fmt.title,
@@ -20223,7 +20224,7 @@
       return {
         tooltip: 'Blocks',
         text: Optional.some(fallbackFormat),
-        icon: Optional.none(),
+        icon: Optional.some('paragraph'),
         isSelectedFor,
         getCurrentValue: Optional.none,
         getPreviewFor,
@@ -20445,7 +20446,7 @@
       return {
         tooltip: 'Formats',
         text: Optional.some(fallbackFormat),
-        icon: Optional.none(),
+        icon: Optional.some('format'),
         isSelectedFor,
         getCurrentValue: Optional.none,
         getPreviewFor,
@@ -20471,6 +20472,7 @@
       const menuItems = createMenuItems(editor, backstage, getSpec(editor, dataset));
       editor.ui.registry.addNestedMenuItem('styles', {
         text: 'Formats',
+        icon: 'visualchars',
         getSubmenuItems: () => menuItems.items.validateItems(menuItems.getStyleItems())
       });
     };
